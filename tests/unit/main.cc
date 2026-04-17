@@ -1,7 +1,7 @@
+#include <catch2/catch_test_macros.hpp>
 #include <apex/test.h>
-#include <iostream>
 
-int main() {
-    std::cout << (apx::test() ? "true" : "false") << std::endl;
-    return 0;
+TEST_CASE( "init", "[unit]" )
+{
+    REQUIRE(apx::test());
 }
