@@ -1,2 +1,3 @@
 #pragma once
-#include "test.h"
+#include "core/core.h"
+#include "system/system.h"

@@ -1,4 +1,4 @@
-#include <apex/core/core.h>
+#include <apex/apex.h>
 #include <cassert>
 #include <catch2/catch_test_macros.hpp>
 
@@ -39,7 +39,8 @@ TEST_CASE("dimension construction from standard types", "[dimension]")
 }
 
 template <apx::traits::Numeric U, apx::traits::Numeric T>
-void validate(U u, T t) noexcept
+void
+validate(U u, T t) noexcept
 {
     apx::Dimension<U> d_u{ u };
     apx::Dimension<T> d_t{ t };
@@ -90,7 +91,8 @@ TEST_CASE("dimension comparison from other dimension types", "[dimension]")
 }
 
 template <apx::traits::Numeric U, apx::traits::Numeric T>
-void validate_operations(U u, T t) noexcept
+void
+validate_operations(U u, T t) noexcept
 {
     apx::Dimension<U> d_u{ u };
     apx::Dimension<T> d_t{ t };

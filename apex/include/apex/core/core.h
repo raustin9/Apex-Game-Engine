@@ -4,3 +4,4 @@
 #include "traits.h"
 #include "dimension.h"
 #include "extent.h"
+#include "handle.h"

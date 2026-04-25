@@ -4,11 +4,11 @@
 
 namespace apx
 {
-    template <typename E>
+    template <typename E, typename Code>
     class ErrorBase
     {
       public:
-        std::string_view
+        [[nodiscard]] std::string_view
         message() const noexcept
         {
             return self().to_string();
@@ -18,6 +18,12 @@ namespace apx
         operator<<(std::ostream &os, ErrorBase const &err) noexcept
         {
             return os << err.message();
+        }
+
+        [[nodiscard]] Code
+        code() const noexcept
+        {
+            return self().code();
         }
 
         // CRTP utils
