@@ -6,11 +6,9 @@
 #import <Foundation/Foundation.h>
 #import <Quartz/Quartz.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
-{
-    CADisplayLink       *m_display_link;
-    apx::system::System *m_system;
-}
+@interface                                        AppDelegate : NSObject <NSApplicationDelegate>
+@property(nonatomic, assign) apx::system::System *system;
+- (instancetype)initWithSystem:(apx::system::System *)system;
 @end
 
 #endif // APEX_PLATFORM_APPLE

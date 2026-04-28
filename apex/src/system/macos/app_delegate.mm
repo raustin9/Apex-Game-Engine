@@ -17,12 +17,24 @@ static CVReturn display_link_callback(
 }
 
 @implementation AppDelegate
--(void)applicationDidFinishLaunching:(NSNotification *)notification
+-(instancetype)initWithSystem:(apx::system::System*)system
 {
+    self = [super init];
+    if (self) {
+        _system = system;
+    }
+
+    return self;
 }
 
--(void)applicationWillTerminate:(NSNotification*)notification
+-(void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    NSLog(@"ApplicationDidFinishLaunching");
+}
+
+-(void)applicationWillTerminate:(NSApplication*)application
+{
+    NSLog(@"ApplicationWillTerminate");
 }
 
 -(void)tick:(CADisplayLink*)sender

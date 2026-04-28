@@ -1,6 +1,7 @@
 #include "apex/system/system.h"
 
 #ifdef APEX_PLATFORM_APPLE
+#import "app_delegate.h"
 #include <iostream>
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -13,6 +14,8 @@ namespace apx::system
     {
         System system{};
         [NSApplication sharedApplication];
+        system.setup_delegate();
+
         [NSApp finishLaunching];
 
         if (auto window = Window::create(window_options)) {
@@ -37,6 +40,7 @@ namespace apx::system
                                           dequeue: YES];
                 if (ev) {
                     [NSApp sendEvent: ev];
+                    [NSApp updateWindows];
                 }
             } while (ev);
         }
@@ -44,13 +48,23 @@ namespace apx::system
 
     void System::shutdown() noexcept
     {
-        std::cout << "Shutting down..." << std::endl;
-
+        NSLog(@"Shutting down");
     }
 
     bool System::is_running() const noexcept
     {
-        return m_is_running;
+        return m_window.is_open();
+    }
+
+    void System::setup_delegate() noexcept
+    {
+        m_delegate = [[AppDelegate alloc] initWithSystem:this];
+        [NSApp setDelegate:m_delegate];
+    }
+
+    void System::update_delegate() noexcept
+    {
+        m_delegate.system = this;
     }
 }
 

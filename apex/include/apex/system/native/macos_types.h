@@ -8,8 +8,11 @@
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
 #define OBJC_TYPE(Type) Type *
+
+#define FORWARD_OBJC_TYPE(Type) @class Type
 #else
 #define OBJC_TYPE(Type) void *
+#define FORWARD_OBJC_TYPE(Type)
 #endif
 
 #endif // APEX_PLATFORM_APPLE
