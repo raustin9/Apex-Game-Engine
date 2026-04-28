@@ -7,13 +7,13 @@ namespace apx
     template <traits::Numeric N>
     struct Width : Dimension<N>
     {
-        explicit Width(N width) : Dimension<N>(width) {}
+        explicit constexpr Width(N width) : Dimension<N>(width) {}
     };
 
     template <traits::Numeric N>
     struct Height : Dimension<N>
     {
-        explicit Height(N height) : Dimension<N>(height) {}
+        explicit constexpr Height(N height) : Dimension<N>(height) {}
     };
 
     template <traits::Numeric WidthT, traits::Numeric HeightT = WidthT>
@@ -21,6 +21,13 @@ namespace apx
     {
         Width<WidthT>   width;
         Height<HeightT> height;
+
+        template <traits::Numeric RT = float>
+        constexpr Dimension<RT>
+        aspect_ratio() const noexcept
+        {
+            return Dimension<RT>(static_cast<RT>(width.get()) / height.get());
+        }
     };
 
     using Extent2D_u32 = Extent2D<std::uint32_t>;

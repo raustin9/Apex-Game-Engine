@@ -16,9 +16,15 @@ namespace apx::system
     {
       public:
         [[nodiscard]] static expected<System, SystemError> create(const WindowOptions options = {});
+        [[nodiscard]] bool                                 is_running() const noexcept;
         void                                               shutdown() noexcept;
         void                                               update() noexcept;
-        bool                                               is_running() const noexcept;
+
+        [[nodiscard]] Window &
+        main_window() noexcept
+        {
+            return m_window;
+        }
 
       private:
         [[nodiscard]] explicit System() noexcept = default;

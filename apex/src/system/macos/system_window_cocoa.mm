@@ -17,6 +17,8 @@ namespace apx::system
     expected<Window, SystemError> Window::create(WindowOptions options) noexcept
     {
         Window window {};
+        window.m_title = options.title;
+        window.m_extent = options.extent;
 
         NSRect frame = NSMakeRect(
             0,
@@ -43,15 +45,13 @@ namespace apx::system
 
     Window::Window(const Window& other) noexcept
     {
-        m_native_data = other.m_native_data;
-        m_is_open = other.m_is_open;
+        copy(other);
         update_delegate();
     }
 
     Window::Window(Window&& other) noexcept
     {
-        m_native_data = other.m_native_data;
-        m_is_open = other.m_is_open;
+        move(std::move(other));
         update_delegate();
     }
 
@@ -59,8 +59,7 @@ namespace apx::system
     {
         if (this != &other)
         {
-            m_native_data = other.m_native_data;
-            m_is_open = other.m_is_open;
+            copy(other);
             update_delegate();
         }
 
@@ -71,8 +70,7 @@ namespace apx::system
     {
         if (this != &other)
         {
-            m_native_data = other.m_native_data;
-            m_is_open = other.m_is_open;
+            move(std::move(other));
             update_delegate();
         }
 
@@ -87,24 +85,34 @@ namespace apx::system
     void Window::open() noexcept
     {
         m_is_open = true;
-//        [m_native_data.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
         [m_native_data.window makeKeyAndOrderFront:nil];
         [NSApp activateIgnoringOtherApps:YES];
-        NSLog(@"Window opened");
-        NSLog(m_is_open ? @"m_is_open:true" : @"m_is_open:false");
     }
 
     void Window::close() noexcept
     {
-        NSLog(m_is_open ? @"m_is_open:true" : @"m_is_open:false");
         if (is_open()) {
-            NSLog(@"Closing window");
             [m_native_data.display_link invalidate];
             m_native_data.display_link = nullptr;
             m_is_open = false;
-        } else {
-            NSLog(@"Cannot close closed window");
         }
+    }
+
+    void Window::resize(const Extent2D_u32 new_extent) noexcept
+    {
+        NSSize new_size = NSMakeSize(new_extent.width.get(), new_extent.height.get());
+
+        NSRect content_rect = NSMakeRect(
+            m_native_data.window.frame.origin.x,
+            m_native_data.window.frame.origin.y,
+            new_size.width,
+            new_size.height
+        );
+        NSRect frame_rect = [m_native_data.window frameRectForContentRect:content_rect];
+
+        [m_native_data.window setFrame:frame_rect display:YES animate:NO];
+        [m_native_data.window setContentSize:new_size];
+        __resize_callback(new_extent);
     }
 
     void Window::setup_delegate() noexcept
@@ -117,5 +125,11 @@ namespace apx::system
     {
         m_native_data.delegate.window = this;
     }
+
+    void Window::__resize_callback(Extent2D_u32 new_extent) noexcept
+    {
+        m_extent = new_extent;
+    }
+
 } // namespace apex::system
 #endif // APEX_PLATFORM_APPLE
