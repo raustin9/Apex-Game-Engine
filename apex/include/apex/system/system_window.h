@@ -45,28 +45,28 @@ namespace apx::system
 
         // Observers
       public:
-        /// @brief Get the current extent of the window
+        /// @brief Get the current extent of the window's inner contents
         [[nodiscard]] Extent2D_u32
         extent() const noexcept
         {
             return m_extent;
         }
 
-        /// @brief Get the current width of the window
+        /// @brief Get the current width of the window's inner contents
         [[nodiscard]] Width_u32
         width() const noexcept
         {
             return extent().width;
         }
 
-        /// @brief Get the current height of the window
+        /// @brief Get the current height of the window's inner contents
         [[nodiscard]] Height_u32
         height() const noexcept
         {
             return extent().height;
         }
 
-        /// @brief Get the current aspect ratio of the window
+        /// @brief Get the current aspect ratio of the window's inner contents
         template <traits::FloatingPoint RT = float>
         [[nodiscard]] Dimension<RT>
         aspect_ratio() const noexcept
@@ -97,9 +97,11 @@ namespace apx::system
         void close() noexcept;
 
         /// @brief Resize the window to a new extent
+        /// @note This is resizes the inner content extent of the window
         void resize(Extent2D_u32 new_extent) noexcept;
 
         /// @brief Resize the window to a new width and height
+        /// @note This is resizes the inner content extent of the window
         void
         resize(const Width_u32 new_width, const Height_u32 new_height) noexcept
         {
@@ -107,6 +109,7 @@ namespace apx::system
         }
 
         /// @brief Resize the window to a new width
+        /// @note This is resizes the inner content width of the window
         void
         resize_width(const Width_u32 new_width) noexcept
         {
@@ -114,6 +117,7 @@ namespace apx::system
         }
 
         /// @brief Resize the window to a new height
+        /// @note This is resizes the inner content height of the window
         void
         resize_height(const Height_u32 new_height) noexcept
         {

@@ -86,7 +86,10 @@ TEST_CASE("test window resize", "[system]")
 
             system->main_window().resize(NEW_WIDTH, NEW_HEIGHT);
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            // TODO: when we have event dispatching just read
+            //       the event for finish resize instead of this
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
             system->main_window().close();
             REQUIRE_FALSE(system->main_window().is_open());
             REQUIRE_FALSE(system->is_running());
