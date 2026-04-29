@@ -7,10 +7,10 @@ namespace apx
     template <traits::Numeric N>
     class Dimension
     {
-    public:
-        using value_type = N;
+      public:
+        using value_type      = N;
         using difference_type = value_type;
-        using size_type = std::size_t;
+        using size_type       = std::size_t;
 
       public:
         constexpr explicit Dimension(N n) noexcept : m_value{ n } {}
@@ -199,6 +199,13 @@ namespace apx
         operator N() const noexcept
         {
             return get();
+        }
+
+        template <traits::Numeric U>
+        constexpr Dimension<U>
+        as() const noexcept
+        {
+            return Dimension<U>{ static_cast<U>(get()) };
         }
 
       private:

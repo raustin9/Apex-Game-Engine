@@ -26,7 +26,7 @@ namespace apx
         constexpr Dimension<RT>
         aspect_ratio() const noexcept
         {
-            return Dimension<RT>(static_cast<RT>(width.get()) / height.get());
+            return Dimension<RT>(width.template as<RT>().get() / height.get());
         }
     };
 
