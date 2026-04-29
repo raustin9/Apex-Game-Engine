@@ -1,3 +1,4 @@
+#pragma once
 #include "apex/system/system.h"
 
 #ifdef APEX_PLATFORM_APPLE

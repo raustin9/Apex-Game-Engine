@@ -57,8 +57,9 @@ namespace apx
         N m_value;
     };
 
-    using handle_u32 = Handle<std::uint32_t>;
-    using handle_u64 = Handle<std::uint32_t>;
+    using Handle_u32   = Handle<std::uint32_t>;
+    using Handle_u64   = Handle<std::uint64_t>;
+    using Handle_usize = Handle<std::size_t>;
 } // namespace apx
 
 /// NOLINTBEGIN

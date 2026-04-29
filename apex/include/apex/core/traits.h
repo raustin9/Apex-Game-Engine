@@ -11,4 +11,7 @@ namespace apx::traits
 
     template <typename T>
     concept Numeric = Integral<T> || FloatingPoint<T>;
+
+    template <typename T>
+    concept POD = std::is_pod_v<T>;
 } // namespace apx::traits
