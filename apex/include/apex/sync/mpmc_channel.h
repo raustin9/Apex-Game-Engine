@@ -1,8 +1,7 @@
 #pragma once
 #include <queue>
-#include <utility>
 
-namespace apx::sync::mpsc
+namespace apx::sync::mpmc
 {
     template <typename T>
     class Channel
@@ -11,26 +10,44 @@ namespace apx::sync::mpsc
         class Reader;
         class Writer;
 
-        /// @brief Create the reader and writer from the channel
-        [[nodiscard]] static std::pair<Reader, Writer> create() noexcept;
+        [[nodiscard]] static std::pair<Reader, Writer>
+        create()
+        {
+            std::shared_ptr<Channel> channel(new Channel());
+
+            return std::make_pair(Channel<T>::Reader{ channel }, Channel<T>::Writer{ channel });
+        }
 
         Channel(const Channel &)            = delete;
-        Channel &operator=(const Channel &) = delete;
         Channel(Channel &&)                 = delete;
+        Channel &operator=(const Channel &) = delete;
         Channel &operator=(Channel &&)      = delete;
 
       private:
-        [[nodiscard]] explicit Channel() = default;
+        [[nodiscard]] explicit Channel() noexcept = default;
 
         friend class Reader;
         friend class Writer;
 
-        /// @brief Get the most recent value from the queue.
-        /// @note This will block until a value is written
-        [[nodiscard]] T pop() noexcept;
+        void
+        push(T value) noexcept
+        {
+            std::unique_lock lock{ m_mutex };
+            m_queue.push(std::move(value));
+            m_condition.notify_one();
+        }
 
-        /// @brief Push a new value onto the queue
-        void            push(T value) noexcept;
+        T
+        pop() noexcept
+        {
+            std::unique_lock lock{ m_mutex };
+
+            m_condition.wait(lock, [this] { return !m_queue.empty(); });
+            T value = std::move(m_queue.front());
+            m_queue.pop();
+
+            return std::move(value);
+        }
 
       private:
         std::queue<T>           m_queue;
@@ -48,8 +65,8 @@ namespace apx::sync::mpsc
         }
 
         // Reader is non-copyable
-        Reader(const Reader &)            = delete;
-        Reader &operator=(const Reader &) = delete;
+        Reader(const Reader &)            = default;
+        Reader &operator=(const Reader &) = default;
 
         // Reader is movable
         Reader(Reader &&)            = default;
@@ -99,35 +116,4 @@ namespace apx::sync::mpsc
       private:
         std::shared_ptr<Channel> m_channel;
     };
-
-    template <typename T>
-    std::pair<typename Channel<T>::Reader, typename Channel<T>::Writer>
-    Channel<T>::create() noexcept
-    {
-        std::shared_ptr<Channel> channel(new Channel());
-
-        return std::make_pair(Channel<T>::Reader{ channel }, Channel<T>::Writer{ channel });
-    }
-
-    template <typename T>
-    T
-    Channel<T>::pop() noexcept
-    {
-        std::unique_lock lock{ m_mutex };
-
-        m_condition.wait(lock, [this] { return !m_queue.empty(); });
-        T value = std::move(m_queue.front());
-        m_queue.pop();
-
-        return std::move(value);
-    }
-
-    template <typename T>
-    void
-    Channel<T>::push(T value) noexcept
-    {
-        std::unique_lock lock{ m_mutex };
-        m_queue.push(std::move(value));
-        m_condition.notify_one();
-    }
-} // namespace apx::sync::mpsc
+} // namespace apx::sync::mpmc

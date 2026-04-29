@@ -4,9 +4,20 @@
 
 template <typename T>
 void
-test_mpsc_channel(const T expected_result)
+test_mpsc_channel(T expected_result)
 {
     auto [reader, writer] = apx::sync::mpsc::Channel<T>::create();
+
+    STATIC_REQUIRE_FALSE(
+        std::is_copy_constructible_v<typename apx::sync::mpsc::Channel<T>::Reader>);
+    STATIC_REQUIRE_FALSE(std::is_copy_assignable_v<typename apx::sync::mpsc::Channel<T>::Reader>);
+    STATIC_REQUIRE(std::is_move_constructible_v<typename apx::sync::mpsc::Channel<T>::Reader>);
+    STATIC_REQUIRE(std::is_move_assignable_v<typename apx::sync::mpsc::Channel<T>::Reader>);
+
+    STATIC_REQUIRE(std::is_copy_constructible_v<typename apx::sync::mpsc::Channel<T>::Writer>);
+    STATIC_REQUIRE(std::is_copy_assignable_v<typename apx::sync::mpsc::Channel<T>::Writer>);
+    STATIC_REQUIRE(std::is_move_constructible_v<typename apx::sync::mpsc::Channel<T>::Writer>);
+    STATIC_REQUIRE(std::is_move_assignable_v<typename apx::sync::mpsc::Channel<T>::Writer>);
 
     std::thread t([writer, expected_result]() mutable { writer.write(expected_result); });
 
@@ -20,6 +31,9 @@ TEST_CASE("write + read primitives", "[mpsc_channel]")
     test_mpsc_channel<int>(10);
     test_mpsc_channel<float>(10.0);
     test_mpsc_channel<double>(1000000000.0);
+
+    std::string test = "test";
+    test_mpsc_channel(test);
 }
 
 TEST_CASE("write + read custom object", "[mpsc_channel]")
