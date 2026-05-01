@@ -24,11 +24,13 @@ namespace apx::sync::mpmc
         Channel &operator=(Channel &&)      = delete;
 
       private:
+        /// @brief Private constructor. Use factory `create()` instead
         [[nodiscard]] explicit Channel() noexcept = default;
 
         friend class Reader;
         friend class Writer;
 
+        /// @brief Push a value onto the held queue
         void
         push(T value) noexcept
         {
@@ -37,6 +39,7 @@ namespace apx::sync::mpmc
             m_condition.notify_one();
         }
 
+        /// @brief Pop a value from the queue
         T
         pop() noexcept
         {

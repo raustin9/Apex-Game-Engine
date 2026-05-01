@@ -27,6 +27,24 @@ namespace apx::containers
             return !m_free_list.empty();
         }
 
+        [[nodiscard]] std::size_t
+        raw_elements_size() const noexcept
+        {
+            return m_elements.size();
+        }
+
+        [[nodiscard]] std::size_t
+        free_list_size() const noexcept
+        {
+            return m_free_list.size();
+        }
+
+        [[nodiscard]] std::size_t
+        num_elements() const noexcept
+        {
+            return raw_elements_size() - free_list_size();
+        }
+
         // Public methods
       public:
         /// @brief Apply a callback function for each valid slot
@@ -37,7 +55,7 @@ namespace apx::containers
             for ( auto &element : m_elements )
                 {
                     if ( element.occupied )
-                        fn(element.value);
+                        fn(element.element);
                 }
         }
 
