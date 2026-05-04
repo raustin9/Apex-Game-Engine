@@ -1,6 +1,7 @@
 #pragma once
 #include "apex/core/core.h"
 #include "apex/event/event.h"
+#include "system_key.h"
 
 #include <tuple>
 #include <variant>
@@ -18,7 +19,7 @@ namespace apx::system
 
     struct KeyDown
     {
-        std::string key;
+        Key key;
     };
 
     using SystemEvents = EventList<WindowClosed, WindowResized, KeyDown>;

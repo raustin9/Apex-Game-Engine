@@ -34,7 +34,7 @@ static CVReturn display_link_callback(
     [NSEvent addLocalMonitorForEventsMatchingMask:(NSEventMaskKeyDown)
     handler:^NSEvent * _Nullable(NSEvent *event) {
         NSLog(@"KEY_DOWN");
-        _system_handler->handle_key_down("test key");
+        _system_handler->handle_key_down(apx::Key::Code::A);
         return event;
     }];
 }

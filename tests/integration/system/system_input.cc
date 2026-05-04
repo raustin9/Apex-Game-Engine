@@ -4,7 +4,7 @@
 TEST_CASE("key down", "[system_input]")
 {
     apx::system::InputHandler<apx::system::SystemEvents> input_handler;
-    input_handler.fire<apx::system::KeyDown>("test");
+    input_handler.fire<apx::system::KeyDown>(apx::Key::Code::A);
 }
 
 TEST_CASE("window resized", "[system_input]")

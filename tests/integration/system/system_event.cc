@@ -13,7 +13,7 @@ TEST_CASE("event broker", "[system_event]")
 {
     test_broker<int>(10);
     test_broker<float>(10.f);
-    test_broker(apx::system::KeyDown{ "test" });
+    test_broker(apx::system::KeyDown{ apx::Key::Code::A });
     test_broker(std::string("hello"));
 }
 

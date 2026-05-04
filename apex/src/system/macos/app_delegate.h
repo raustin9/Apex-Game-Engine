@@ -17,9 +17,9 @@ namespace apx::system
         [[nodiscard]] explicit AppDelegateHandler(System *system) noexcept : m_system(system) {}
 
         void
-        handle_key_down(std::string msg)
+        handle_key_down(const Key::Code key_code)
         {
-            m_system->dispatch_event<KeyDown>(msg);
+            m_system->dispatch_event<KeyDown>(key_code);
         }
 
       private:
