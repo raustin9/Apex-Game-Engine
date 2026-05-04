@@ -2,6 +2,8 @@
 #include "system_detection.h"
 #include "system_error.h"
 #include "system_headers.h"
+#include "system_input.h"
+#include "system_key.h"
 #include "system_manager.h"
 #include "system_traits.h"
 #include "system_traits_macos.h"

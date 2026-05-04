@@ -1,7 +1,7 @@
 #include <apex/apex.h>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("add subscriber", "[mpmc_broker]")
+TEST_CASE("add subscriber", "[broker]")
 {
     apx::sync::Broker<int> broker{};
     auto                   callback = [](int i) { return i; };
@@ -10,7 +10,7 @@ TEST_CASE("add subscriber", "[mpmc_broker]")
     REQUIRE(broker.num_subscriptions() == 1);
 }
 
-TEST_CASE("remove subscriber", "[mpmc_broker]")
+TEST_CASE("remove subscriber", "[broker]")
 {
     apx::sync::Broker<int> broker{};
     auto                   callback = [](int i) { return i; };
@@ -22,7 +22,7 @@ TEST_CASE("remove subscriber", "[mpmc_broker]")
     REQUIRE(broker.num_subscriptions() == 0);
 }
 
-TEST_CASE("subscribe and notify (1)", "[mpmc_broker]")
+TEST_CASE("subscribe and notify (1)", "[broker]")
 {
     constexpr int          Expected = 1;
     apx::sync::Broker<int> broker{};

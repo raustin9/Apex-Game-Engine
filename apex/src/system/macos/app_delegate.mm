@@ -21,7 +21,7 @@ static CVReturn display_link_callback(
 {
     self = [super init];
     if (self) {
-        _system = system;
+        _system_handler = std::make_shared<apx::system::AppDelegateHandler>(system);
     }
 
     return self;
@@ -30,6 +30,13 @@ static CVReturn display_link_callback(
 -(void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     NSLog(@"ApplicationDidFinishLaunching");
+
+    [NSEvent addLocalMonitorForEventsMatchingMask:(NSEventMaskKeyDown)
+    handler:^NSEvent * _Nullable(NSEvent *event) {
+        NSLog(@"KEY_DOWN");
+        _system_handler->handle_key_down("test key");
+        return event;
+    }];
 }
 
 -(void)applicationWillTerminate:(NSApplication*)application

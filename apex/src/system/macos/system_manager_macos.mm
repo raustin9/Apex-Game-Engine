@@ -16,6 +16,7 @@ namespace apx::system
         [NSApplication sharedApplication];
         system.setup_delegate();
 
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
         [NSApp finishLaunching];
 
         if (auto window = Window::create(window_options)) {
@@ -64,7 +65,8 @@ namespace apx::system
 
     void System::update_delegate() noexcept
     {
-        m_delegate.system = this;
+        NSLog(@"Updating system delegates");
+        m_delegate.system_handler->update_system(this);
     }
 }
 

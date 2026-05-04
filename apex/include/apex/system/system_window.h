@@ -32,11 +32,6 @@ namespace apx::system
         };
 
       public:
-        /// @brief Attempt to create a window with the given options
-        /// @returns `apx::unexpected<apx::system::SystemError>` on failure and
-        /// `apx::system::Window` on success
-        [[nodiscard]] static expected<Window, SystemError> create(WindowOptions options) noexcept;
-
         Window(const Window &) noexcept;
         Window(Window &&) noexcept;
         Window &operator=(const Window &) noexcept;
@@ -126,6 +121,11 @@ namespace apx::system
 
       private:
         friend class System;
+
+        /// @brief Attempt to create a window with the given options
+        /// @returns `apx::unexpected<apx::system::SystemError>` on failure and
+        /// `apx::system::Window` on success
+        [[nodiscard]] static expected<Window, SystemError> create(WindowOptions options) noexcept;
 
         explicit Window() noexcept = default;
 

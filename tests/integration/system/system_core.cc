@@ -99,3 +99,39 @@ TEST_CASE("test window resize", "[system]")
     REQUIRE(system->main_window().height() == NEW_HEIGHT);
     system->shutdown();
 }
+
+void
+test_key(apx::Key::Code key_code, std::string expected_string, std::string_view expected_sv,
+         bool is_alpha, bool is_numeric)
+{
+
+    apx::Key key  = key_code;
+    apx::Key key2 = key_code;
+    REQUIRE(key.code() == key_code);
+    REQUIRE(key == key_code);
+    REQUIRE(key == key2);
+
+    std::stringstream ss;
+    ss << key;
+    std::string extracted_string = ss.str();
+    REQUIRE(expected_string == extracted_string);
+
+    REQUIRE(is_alpha == key.is_alpha());
+    REQUIRE(is_numeric == key.is_numeric());
+}
+
+TEST_CASE("key", "[system]")
+{
+    test_key(apx::Key::Code::A, "A", "A", true, false);
+    test_key(apx::Key::Code::Z, "Z", "Z", true, false);
+    test_key(apx::Key::Code::Num1, "Num1", "Num1", false, true);
+    test_key(apx::Key::Code::Num2, "Num2", "Num2", false, true);
+    test_key(apx::Key::Code::Num3, "Num3", "Num2", false, true);
+    test_key(apx::Key::Code::Num4, "Num4", "Num4", false, true);
+    test_key(apx::Key::Code::Num5, "Num5", "Num5", false, true);
+    test_key(apx::Key::Code::Num6, "Num6", "Num6", false, true);
+    test_key(apx::Key::Code::Num7, "Num7", "Num7", false, true);
+    test_key(apx::Key::Code::Num8, "Num8", "Num8", false, true);
+    test_key(apx::Key::Code::Num9, "Num9", "Num9", false, true);
+    test_key(apx::Key::Code::Num0, "Num0", "Num0", false, true);
+}
