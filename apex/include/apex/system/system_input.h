@@ -22,6 +22,7 @@ namespace apx::system
         Key key;
     };
 
+    using SystemEvent  = std::variant<KeyDown, WindowResized>;
     using SystemEvents = EventList<WindowClosed, WindowResized, KeyDown>;
 
     template <typename EventList>
@@ -37,8 +38,7 @@ namespace apx::system
         void
         fire(Args &&...args)
         {
-            get_broker<T>().fire(T{ args... });
-            // get_broker<T>().fire(T{ std::forward<Args>(args)... });
+            get_broker<T>().fire(T{ std::forward<Args>(args)... });
         }
 
       private:

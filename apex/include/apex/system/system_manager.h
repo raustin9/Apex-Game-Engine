@@ -2,6 +2,7 @@
 #include "apex/core/core.h"
 #include "native/native_types.h"
 #include "system_error.h"
+#include "system_event.h"
 #include "system_input.h"
 #include "system_window.h"
 
