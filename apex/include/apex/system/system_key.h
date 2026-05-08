@@ -60,6 +60,8 @@ namespace apx
             RightCtrl,
             LeftSystem,
             RightSystem,
+            LeftShift,
+            RightShift,
             Menu,
             LeftBracket,
             RightBracket,
@@ -289,6 +291,10 @@ namespace apx
                     return "LeftCtrl";
                 case Code::RightCtrl:
                     return "RightCtrl";
+                case Code::LeftShift:
+                    return "LeftShift";
+                case Code::RightShift:
+                    return "RightShift";
                 case Code::LeftSystem:
                     return "LeftSystem";
                 case Code::RightSystem:

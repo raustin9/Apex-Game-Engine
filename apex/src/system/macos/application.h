@@ -9,6 +9,8 @@
 
 #include <memory>
 
+using ScanCode = unsigned short;
+
 namespace apx::system
 {
     class SystemHandler
@@ -26,6 +28,11 @@ namespace apx::system
 
       private:
         friend class System;
+
+        void                    handle_cocoa_key_event(NSEvent *event) noexcept;
+        void                    handle_cocoa_mouse_event(NSEvent *event) noexcept;
+
+        [[nodiscard]] Key::Code translate_key(const ScanCode scan_code) noexcept;
 
         void
         update_system(System *system) noexcept
