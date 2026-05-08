@@ -1,7 +1,7 @@
 #include "apex/system/system.h"
 
 #ifdef APEX_PLATFORM_APPLE
-#import "app_delegate.h"
+#import "application.h"
 #include <iostream>
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -13,7 +13,7 @@ namespace apx::system
     expected<System, SystemError> System::create(const WindowOptions window_options)
     {
         System system{};
-        [NSApplication sharedApplication];
+        [ApexApplication sharedApplication];
         system.setup_delegate();
 
         [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];

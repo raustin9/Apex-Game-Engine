@@ -74,9 +74,11 @@ namespace apx::system
 
         Storage m_event;
     };
+
+    using SystemEvent = Event<SystemEventList>;
 } // namespace apx::system
 
 namespace apx
 {
-    using Event = system::Event<system::SystemEventList>;
+    using Event = system::SystemEvent;
 } // namespace apx

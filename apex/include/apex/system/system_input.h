@@ -3,52 +3,26 @@
 #include "apex/event/event.h"
 #include "system_key.h"
 
-#include <tuple>
-#include <variant>
+#include <array>
 
 namespace apx::system
 {
-    struct WindowClosed
-    {
-    };
-
-    struct WindowResized
-    {
-        Extent2D_f32 extent;
-    };
-
-    struct KeyDown
-    {
-        Key key;
-    };
-
-    using SystemEvent  = std::variant<KeyDown, WindowResized>;
-    using SystemEvents = EventList<WindowClosed, WindowResized, KeyDown>;
-
-    template <typename EventList>
-    class InputHandler;
-
-    template <typename... Events>
-    class InputHandler<EventList<Events...>>
+    class InputHandler
     {
       public:
         [[nodiscard]] explicit InputHandler() noexcept = default;
 
-        template <typename T, typename... Args>
-        void
-        fire(Args &&...args)
-        {
-            get_broker<T>().fire(T{ std::forward<Args>(args)... });
-        }
+        void key_down(const Key::Code key_code) noexcept;
 
       private:
-        template <typename T>
-        [[nodiscard]] EventBroker<T> &
-        get_broker() noexcept
+        struct KeyState
         {
-            return std::get<EventBroker<T>>(m_brokers);
-        }
+            using KeyTable = std::array<bool, static_cast<std::size_t>(Key::Code::NUM_KEYS)>;
 
-        std::tuple<EventBroker<Events>...> m_brokers{};
+            KeyTable previous;
+            KeyTable current;
+        };
+
+        KeyState m_key_state;
     };
 } // namespace apx::system

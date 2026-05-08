@@ -39,20 +39,11 @@ namespace apx::system
       private:
         [[nodiscard]] explicit System() noexcept = default;
 
-        /// @brief Dispatch a system event
-        /// @tparam T the type of the system event to dispatch. i.e KeyDown or WindowClosed
-        template <typename T, typename... Args>
-        void
-        dispatch_event(Args &&...args) noexcept
-        {
-            m_input_handler->fire<T>(std::forward<Args>(args)...);
-        }
-
         // Private members
       private:
-        Window                                      m_window;
-        std::shared_ptr<InputHandler<SystemEvents>> m_input_handler
-            = std::make_shared<InputHandler<SystemEvents>>();
+        Window                        m_window;
+        std::shared_ptr<InputHandler> m_input_handler = std::make_shared<InputHandler>();
+        EventBroker<SystemEvent>      m_event_broker{};
 
         void
         copy(const System &from) noexcept

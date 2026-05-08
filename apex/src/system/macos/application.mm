@@ -1,27 +1,33 @@
 #include "apex/system/system.h"
 
 #ifdef APEX_PLATFORM_APPLE
-#import "app_delegate.h"
+#import "application.h"
 
-using CallbackUserData = apx::system::System;
+@implementation ApexApplication : NSApplication
+-(instancetype)initWithSystem:(apx::system::System*)system
+{
+    self = [super init];
+    if (self) {
+        _system_handler = std::make_shared<apx::system::SystemHandler>(system);
+    }
 
-static CVReturn display_link_callback(
-    CVDisplayLinkRef display_link,
-    const CVTimeStamp *now,
-    const CVTimeStamp *output_time,
-    CVOptionFlags flags_in,
-    CVOptionFlags flags_out,
-    void *user_data
-) {
-    return kCVReturnSuccess;
+    return self;
 }
+
+-(void) sendEvent:(NSEvent *)event
+{
+    // TODO: handle cocoa events
+    [super sendEvent:event];
+}
+
+@end
 
 @implementation AppDelegate
 -(instancetype)initWithSystem:(apx::system::System*)system
 {
     self = [super init];
     if (self) {
-        _system_handler = std::make_shared<apx::system::AppDelegateHandler>(system);
+        _system_handler = std::make_shared<apx::system::SystemHandler>(system);
     }
 
     return self;

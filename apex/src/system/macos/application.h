@@ -11,15 +11,15 @@
 
 namespace apx::system
 {
-    class AppDelegateHandler
+    class SystemHandler
     {
       public:
-        [[nodiscard]] explicit AppDelegateHandler(System *system) noexcept : m_system(system) {}
+        [[nodiscard]] explicit SystemHandler(System *system) noexcept : m_system(system) {}
 
         void
         handle_key_down(const Key::Code key_code)
         {
-            m_system->dispatch_event<KeyDown>(key_code);
+            // m_system->dispatch_event<KeyDown>(key_code);
         }
 
       private:
@@ -35,8 +35,20 @@ namespace apx::system
     };
 } // namespace apx::system
 
+@interface ApexApplication : NSApplication
+@property(nonatomic, assign) std::shared_ptr<apx::system::SystemHandler> system_handler;
+
+/// @brief Init the application with a system
+- (instancetype)initWithSystem:(apx::system::System *)system;
+
+/// @brief Handle sending the cocoa events
+- (void)sendEvent:(NSEvent *)event;
+@end
+
 @interface AppDelegate : NSObject <NSApplicationDelegate>
-@property(nonatomic, assign) std::shared_ptr<apx::system::AppDelegateHandler> system_handler;
+@property(nonatomic, assign) std::shared_ptr<apx::system::SystemHandler> system_handler;
+
+/// @brief Init the application delegate with a system
 - (instancetype)initWithSystem:(apx::system::System *)system;
 @end
 

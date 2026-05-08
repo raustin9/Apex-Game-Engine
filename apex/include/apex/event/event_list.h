@@ -1,10 +1,9 @@
 #pragma once
+#include "apex/core/core.h"
 
 namespace apx
 {
-    /// @brief This is used for defining a set of events
+    /// @brief Used for defining a set/list of events
     template <typename... Events>
-    struct EventList
-    {
-    };
+    using EventList = TypeList<Events...>;
 } // namespace apx
