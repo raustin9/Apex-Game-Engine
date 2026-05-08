@@ -3,6 +3,33 @@
 #ifdef APEX_PLATFORM_APPLE
 #import "application.h"
 
+void
+apx::system::SystemHandler::handle_cocoa_event(NSEvent *event) noexcept
+{
+    switch ([event type])
+    {
+        case NSEventTypeLeftMouseDown:
+        case NSEventTypeRightMouseDown:
+        case NSEventTypeLeftMouseUp:
+        case NSEventTypeRightMouseUp:
+        case NSEventTypeLeftMouseDragged:
+        case NSEventTypeRightMouseDragged:
+        case NSEventTypeOtherMouseDragged:
+        case NSEventTypeMouseMoved:
+        case NSEventTypeScrollWheel:
+        case NSEventTypeMouseEntered:
+        case NSEventTypeMouseExited:
+            NSLog(@"mouse event");
+            break;
+        case NSEventTypeKeyDown:
+        case NSEventTypeKeyUp:
+            NSLog(@"key event");
+            break;
+        default:
+            break;
+    }
+}
+
 @implementation ApexApplication : NSApplication
 -(instancetype)initWithSystem:(apx::system::System*)system
 {
@@ -16,7 +43,7 @@
 
 -(void) sendEvent:(NSEvent *)event
 {
-    // TODO: handle cocoa events
+    _system_handler->handle_cocoa_event(event);
     [super sendEvent:event];
 }
 
@@ -36,13 +63,6 @@
 -(void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     NSLog(@"ApplicationDidFinishLaunching");
-
-    [NSEvent addLocalMonitorForEventsMatchingMask:(NSEventMaskKeyDown)
-    handler:^NSEvent * _Nullable(NSEvent *event) {
-        NSLog(@"KEY_DOWN");
-        _system_handler->handle_key_down(apx::Key::Code::A);
-        return event;
-    }];
 }
 
 -(void)applicationWillTerminate:(NSApplication*)application

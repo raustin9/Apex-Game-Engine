@@ -22,6 +22,8 @@ namespace apx::system
             // m_system->dispatch_event<KeyDown>(key_code);
         }
 
+        void handle_cocoa_event(NSEvent *event) noexcept;
+
       private:
         friend class System;
 
