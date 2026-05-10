@@ -1,6 +1,37 @@
-#import "window_delegate.h"
-
 #include "apex/core/core.h"
+#import "cocoa_window.h"
+
+#ifdef APEX_PLATFORM_APPLE
+
+@implementation ApexWindow
+// TODO
+-(BOOL)canBecomeKeyWindow
+{
+    return YES;
+}
+
+// TODO
+-(BOOL)canBecomeMainWindow
+{
+    return YES;
+}
+
+-(void)sendEvent:(NSEvent *)event
+{
+    [super sendEvent:event];
+
+    if ([event type] == NSEventTypeLeftMouseUp)
+    {
+        return;
+    }
+}
+
+-(void)doCommandBySelector:(SEL)selector
+{
+    // no-op
+}
+
+@end
 
 @implementation WindowDelegate
 - (instancetype)initWithWindow:(apx::system::Window *)window {
@@ -55,3 +86,5 @@
     _window->close();
 }
 @end
+
+#endif // APEX_PLATFORM_APPLE

@@ -2,7 +2,7 @@
 #include "apex/system/system.h"
 
 #ifdef APEX_PLATFORM_APPLE
-#import "window_delegate.h"
+#import "cocoa_window.h"
 
 // Apple
 #import <AppKit/AppKit.h>

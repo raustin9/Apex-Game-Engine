@@ -24,7 +24,7 @@ SystemHandler::handle_cocoa_event(NSEvent *event) noexcept
         case NSEventTypeScrollWheel:
         case NSEventTypeMouseEntered:
         case NSEventTypeMouseExited:
-            NSLog(@"mouse event");
+//            NSLog(@"mouse event");
             break;
         case NSEventTypeKeyDown:
         case NSEventTypeKeyUp:
@@ -38,7 +38,7 @@ SystemHandler::handle_cocoa_event(NSEvent *event) noexcept
 void SystemHandler::handle_cocoa_key_event(NSEvent *event) noexcept
 {
     const ScanCode scan_code = [event keyCode];
-    const char* key_str = Key(translate_key(scan_code)).c_str();
+    const Key key{ translate_key(scan_code) };
 
     switch ([event type])
     {
@@ -46,11 +46,11 @@ void SystemHandler::handle_cocoa_key_event(NSEvent *event) noexcept
             // Only handle if the key is not already down
             if (![event isARepeat])
             {
-                NSLog(@"KEY DOWN: %s", key_str);
+                NSLog(@"KEY DOWN: %s", key.c_str());
             }
             break;
         case NSEventTypeKeyUp:
-                NSLog(@"KEY UP: %s", key_str);
+                NSLog(@"KEY UP: %s", key.c_str());
             break;
         default:
             break;

@@ -1,4 +1,5 @@
 #pragma once
+#include "display_server.h"
 #include "system_detection.h"
 #include "system_error.h"
 #include "system_event.h"
