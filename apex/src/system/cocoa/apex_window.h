@@ -26,6 +26,16 @@
 // this is a weak
 @property(nonatomic, assign) ApexWindowData *data;
 
+- (void)setupListeners;
+
+@end
+
+@interface                                   ApexView : NSView
+@property(nonatomic, assign) ApexWindowData *data;
+
+- (instancetype)initWithFrameAndData:(NSRect)frame withData:(ApexWindowData *)data;
+- (BOOL)acceptsFirstResponder;
+- (void)mouseMoved:(NSEvent *)event;
 @end
 
 #endif // APEX_PLATFORM_APPLE

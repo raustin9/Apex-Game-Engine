@@ -37,15 +37,12 @@ namespace apx::sync
             [[nodiscard]] explicit Publisher(std::shared_ptr<State> state) noexcept
                 : m_state{ state }
             {
-                std::cout << "Publisher" << std::endl;
             }
 
             void
             notify(Data data)
             {
-                std::cout << "Publisher::notify" << std::endl;
                 m_state.lock()->notify(std::move(data));
-                // m_state->notify(std::move(data));
             }
 
           private:
@@ -83,7 +80,6 @@ namespace apx::sync
         [[nodiscard]] Publisher
         get_publisher() const noexcept
         {
-            std::cout << "get_publisher" << std::endl;
             return Publisher{ m_state };
         }
 

@@ -67,6 +67,8 @@ namespace apx
         Dimension<N> x;
         Dimension<N> y;
 
+        explicit constexpr Point2D(N x, N y) noexcept : x(x), y(y) {}
+
         // TODO: math?
     };
 
@@ -83,6 +85,7 @@ namespace apx
     template <traits::Numeric N>
     struct Vec2 : Point2D<N>
     {
+        using Point2D<N>::Point2D;
     };
 
     using Vec2f32 = Vec2<float>;

@@ -130,9 +130,16 @@ namespace apx::system
         void
         __dispatch_event(T data) noexcept
         {
-            std::cout << "__dispatch_event" << std::endl;
             m_event_handler.dispatch(std::move(data));
         }
+
+        /// @brief Handle a key down event
+        /// @note This should only be called internally
+        void __handle_key_down(const Key::Code code);
+
+        /// @brief Handle a key down event
+        /// @note This should only be called internally
+        void __handle_mouse_move(std::uint32_t x, std::uint32_t y) noexcept;
 
       private:
         friend class DisplayServer;

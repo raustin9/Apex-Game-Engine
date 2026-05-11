@@ -211,5 +211,9 @@ namespace apx
       private:
         N m_value{};
     };
+
+    using Dimension_u32 = Dimension<std::uint32_t>;
+    using Dimension_i32 = Dimension<std::int32_t>;
+    using Dimension_f32 = Dimension<float>;
     // NOLINTEND(google-explicit-constructor)
 } // namespace apx

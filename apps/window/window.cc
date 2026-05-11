@@ -26,11 +26,23 @@ main(void)
     std::cout << "(" << display->current_width() << ", " << display->current_height() << ")"
               << std::endl;
 
-    auto handle
+    const auto handle
         = display->on<apx::system::DisplayClose>([&running](apx::system::DisplayClose close) {
               (void)close;
               running = false;
           });
+
+    const auto escape_handle
+        = display->on<apx::system::KeyDown>([&running](apx::system::KeyDown ev) {
+              if ( ev.key != apx::Key::Code::Esc ) [[likely]]
+                  return;
+
+              std::cout << "Esc pressed. Ending application" << std::endl;
+              running = false;
+          });
+
+    const auto key_handle = display->on<apx::system::KeyUp>(
+        [](apx::system::KeyUp ev) { std::cout << "Key pressed: " << ev.key << std::endl; });
 
     while ( running )
         {
@@ -40,7 +52,7 @@ main(void)
                     if ( event->is<apx::system::MouseMoved>() )
                         {
                             std::cout << "Mouse moved: ("
-                                      << event->get<apx::system::MouseMoved>().position.x
+                                      << event->get<apx::system::MouseMoved>().position.x << ", "
                                       << event->get<apx::system::MouseMoved>().position.y << ")"
                                       << std::endl;
                         }
@@ -48,6 +60,7 @@ main(void)
         }
 
     (void)display->remove_listener<apx::system::DisplayClose>(handle);
+    (void)display->remove_listener<apx::system::KeyDown>(escape_handle);
 
     return 0;
 }

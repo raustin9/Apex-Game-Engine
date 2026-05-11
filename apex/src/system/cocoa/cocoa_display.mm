@@ -48,7 +48,7 @@ namespace apx::system
                                                       styleMask:style
                                                         backing:NSBackingStoreBuffered
                                                           defer:NO];
-            NSView *content_view = [[NSView alloc] initWithFrame:frame];
+            NSView *content_view = [[ApexView alloc] initWithFrameAndData:frame withData:native_data->data];
 
             ApexWindowDelegate2 *delegate = [[ApexWindowDelegate2 alloc] init];
             delegate.data = native_data->data;
@@ -59,8 +59,8 @@ namespace apx::system
 
             [native_data->data.window setAcceptsMouseMovedEvents:YES];
 
+            [native_data->data.window center];
             [native_data->data.window makeKeyAndOrderFront:nil];
-            [NSApp activateIgnoringOtherApps:YES];
 
             native_data->data.display = std::weak_ptr(display);
 
