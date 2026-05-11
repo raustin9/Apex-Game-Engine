@@ -1,8 +1,10 @@
 #pragma once
 #include "apex/core/core.h"
+#include "apex/event/event.h"
 #include "system_error.h"
+#include "system_event.h"
+#include "system_event_handler.h"
 
-#include <__ranges/views.h>
 #include <optional>
 #include <ranges>
 #include <string>
@@ -121,7 +123,7 @@ namespace apx::system
         std::unique_ptr<NativeData> m_native_data{ nullptr };
     };
 
-    /// @brief  Handle corresponding to a Display
+    /// @brief  Handle for retrieving Display
     using DisplayHandle = Display::Handle;
 
     /// @brief An interface for managing interactive displays
@@ -170,6 +172,13 @@ namespace apx::system
                 }
         }
 
+        // TODO: remove this when real message passing is done
+        void
+        send_close() noexcept
+        {
+            m_event_handler.dispatch(WindowClose{});
+        }
+
       private:
         /// @brief Internal data that is native to the platform being compiled
         struct NativeData;
@@ -182,5 +191,7 @@ namespace apx::system
 
         std::unordered_map<DisplayHandle, std::shared_ptr<Display>> m_displays;
         std::unique_ptr<NativeData>                                 m_native_data{ nullptr };
+        bool                                                        m_is_running{ false };
+        SystemEventHandler<SystemEventList>                         m_event_handler;
     };
 } // namespace apx::system

@@ -68,7 +68,8 @@ namespace apx::sync
         // Mutators
       public:
         [[nodiscard]] SubscriptionHandle
-        subscribe(Subscription &&subscriber) noexcept
+        // subscribe(Subscription &&subscriber) noexcept
+        subscribe(Subscription subscriber) noexcept
         {
             return m_state->subscriptions.insert(subscriber);
         }

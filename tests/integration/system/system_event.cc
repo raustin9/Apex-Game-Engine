@@ -9,6 +9,8 @@ test_broker(T data)
     broker.fire(std::move(data));
 }
 
+TEST_CASE("system event handler", "[system_event]") {}
+
 // TEST_CASE("event broker", "[system_event]")
 // {
 //     test_broker<int>(10);

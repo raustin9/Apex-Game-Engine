@@ -32,6 +32,7 @@ namespace apx::system
         native_data->data.display_server = server;
 
         server->m_native_data = std::move(native_data);
+        server->m_is_running = true;
 
         return server;
     }

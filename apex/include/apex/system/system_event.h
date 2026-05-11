@@ -10,11 +10,11 @@ namespace apx::system
     {
     };
 
-    // /// @brief Triggers when a window is closed
-    // struct WindowClosed
-    // {
-    // };
-    //
+    /// @brief Triggers when a window is closed
+    struct WindowClose
+    {
+    };
+
     // /// @brief Triggers when a key is pressed
     // struct KeyDown
     // {
@@ -36,7 +36,7 @@ namespace apx::system
     //     Extent2D_f32 extent;
     // };
 
-    using SystemEventList = EventList<WindowOpen, KeyUp>;
+    using SystemEventList = EventList<WindowOpen, WindowClose, KeyUp>;
 
     template <typename EventKinds>
     class Event;
