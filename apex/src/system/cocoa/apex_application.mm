@@ -4,7 +4,7 @@
 
 @end
 
-@implementation ApexApplication
+@implementation ApexApplication2
 -(instancetype)initWithData:(ApexApplicationData *)data
 {
     self = [super init];
@@ -19,5 +19,10 @@
 -(void) terminate:(id)sender
 {
     // TODO: send quit message?
+}
+
+-(void)sendEvent:(NSEvent *)event
+{
+    [super sendEvent:event];
 }
 @end

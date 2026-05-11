@@ -14,6 +14,8 @@ namespace apx::system
     /// @brief An interactive display
     class Display
     {
+        using EventHandler = SystemEventHandler<SystemEventList>;
+
       public:
         static constexpr uint32_t         DefaultWidth  = 800;
         static constexpr uint32_t         DefaultHeight = 600;
@@ -95,9 +97,49 @@ namespace apx::system
         /// @brief Update the title of this display
         bool set_title(std::string_view title) noexcept;
 
+        // Event handling
+      public:
+        /// @brief Register a listener callback to trigger on a given event
+        /// @tparam T The type of event
+        template <typename T>
+        [[nodiscard]] EventHandler::Handle<T>
+        on(EventHandler::Listener<T> listener) noexcept
+        {
+            return m_event_handler.on<T>(listener);
+        }
+
+        /// @brief Get the next event received from the window
+        [[nodiscard]] std::optional<EventHandler::UnifiedEvent>
+        next_event() noexcept
+        {
+            return m_event_handler.next_event();
+        }
+
+        /// @brief Remove a listener from the window
+        /// @tparam T The type of event
+        template <typename T>
+        [[nodiscard]] bool
+        remove_listener(const EventHandler::Handle<T> handle) noexcept
+        {
+            return m_event_handler.remove_listener<T>(handle);
+        }
+
+        /// @brief Dispatch an event sent from this window
+        /// @note This should only be called internally
+        template <typename T>
+        void
+        __dispatch_event(T data) noexcept
+        {
+            std::cout << "__dispatch_event" << std::endl;
+            m_event_handler.dispatch(std::move(data));
+        }
+
       private:
         friend class DisplayServer;
+
+        // Defined by each platform
         struct NativeData;
+        friend struct NativeData;
 
         /// @note Private constructor only accessible from DisplayServer class
         /// @note Implemented by each platform
@@ -112,13 +154,15 @@ namespace apx::system
             return m_handle;
         }
 
-        // Non-native data
+        /* Non-native data */
+
         std::string                 m_title;
         std::optional<float>        m_max_aspect_ratio;
         std::optional<float>        m_min_aspect_ratio;
         Extent2D_u32                m_current_extent;
         Handle                      m_handle;
         DisplayServer              *m_server;
+        EventHandler                m_event_handler;
 
         std::unique_ptr<NativeData> m_native_data{ nullptr };
     };
@@ -176,8 +220,11 @@ namespace apx::system
         void
         send_close() noexcept
         {
-            m_event_handler.dispatch(WindowClose{});
+            m_event_handler.dispatch(DisplayClose{});
         }
+
+        /// @brief Pump the events
+        void pump_events() noexcept;
 
       private:
         /// @brief Internal data that is native to the platform being compiled

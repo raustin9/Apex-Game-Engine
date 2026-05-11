@@ -31,8 +31,16 @@ namespace apx::system
         native_data->data = [[ApexApplicationData alloc] init];
         native_data->data.display_server = server;
 
+//        ApexApplication2 *app = [ApexApplication2 sharedApplication];
+
+//        app.data = native_data->data;
+        [NSApplication sharedApplication];
+
         server->m_native_data = std::move(native_data);
         server->m_is_running = true;
+
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+        [NSApp finishLaunching];
 
         return server;
     }
@@ -52,6 +60,23 @@ namespace apx::system
 
         m_displays.insert({display->handle(), display});
         return display;
+    }
+
+    void DisplayServer::pump_events() noexcept
+    {
+        @autoreleasepool {
+            NSEvent *ev { nullptr };
+            do {
+                ev = [NSApp nextEventMatchingMask: NSEventMaskAny
+                                        untilDate: nil
+                                           inMode: NSDefaultRunLoopMode
+                                          dequeue: YES];
+                if (ev) {
+                    [NSApp sendEvent: ev];
+                    [NSApp updateWindows];
+                }
+            } while (ev);
+        }
     }
 
     void

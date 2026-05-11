@@ -23,4 +23,16 @@
 
 @end
 
+@implementation ApexWindowDelegate2
+
+-(BOOL)windowShouldClose:(id)sender
+{
+    NSLog(@"windowShouldClose");
+    _data.display.lock()->__dispatch_event<apx::system::DisplayClose>({});
+    NSLog(@"post dispatch");
+    return NO;
+}
+
+@end
+
 #endif // APEX_PLATFORM_APPLE

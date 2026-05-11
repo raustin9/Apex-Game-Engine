@@ -1,43 +1,11 @@
 #pragma once
 #include "apex/core/core.h"
 #include "apex/event/event.h"
+#include "system_events.h"
 #include "system_key.h"
 
 namespace apx::system
 {
-    /// @brief Triggers when a window is opened
-    struct WindowOpen
-    {
-    };
-
-    /// @brief Triggers when a window is closed
-    struct WindowClose
-    {
-    };
-
-    // /// @brief Triggers when a key is pressed
-    // struct KeyDown
-    // {
-    //     /// @brief The key that is pressed
-    //     Key key;
-    // };
-
-    /// @brief Triggers when a key that is pressed is released
-    struct KeyUp
-    {
-        /// @brief The key that was released
-        Key key;
-    };
-
-    // /// @brief Triggers when the window is resized.
-    // struct WindowResized
-    // {
-    //     /// @brief The extent of the renderable content of the window after the resize
-    //     Extent2D_f32 extent;
-    // };
-
-    using SystemEventList = EventList<WindowOpen, WindowClose, KeyUp>;
-
     template <typename EventKinds>
     class Event;
 
@@ -55,6 +23,7 @@ namespace apx::system
         {
         }
 
+        /// @brief Determine if this event is of a given type
         template <typename T>
         constexpr bool
         is() const noexcept
@@ -62,9 +31,10 @@ namespace apx::system
             return std::holds_alternative<T>(m_event);
         }
 
+        /// @brief Get the T typed data of the event
         template <typename T>
         constexpr T
-        get() noexcept
+        get() const noexcept
         {
             return std::get<T>(m_event);
         }
@@ -75,10 +45,12 @@ namespace apx::system
         Storage m_event;
     };
 
+    /// @brief Event for system level events
     using SystemEvent = Event<SystemEventList>;
 } // namespace apx::system
 
 namespace apx
 {
-    using Event = system::SystemEvent;
+    /// @brief See `apx::system::SystemEvent`
+    using SystemEvent = system::SystemEvent;
 } // namespace apx

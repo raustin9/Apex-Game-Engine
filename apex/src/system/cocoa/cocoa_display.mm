@@ -8,6 +8,12 @@ namespace apx::system
     struct Display::NativeData
     {
         ApexWindowData *data;
+
+        template <typename T>
+        void dispatch_event(T data) noexcept
+        {
+            data->display->template dispatch_event<T>(data);
+        }
     };
 
     Display::Display(const CreateOptions &options,DisplayServer *server) noexcept
@@ -31,16 +37,32 @@ namespace apx::system
             native_data->data = [[ApexWindowData alloc] init];
             native_data->data.display = display;
 
-            NSRect rect = NSMakeRect(0, 0, options.extent.width, options.extent.height);
+            NSRect frame = NSMakeRect(
+                0,
+                0,
+                options.extent.width,
+                options.extent.height
+            );
             NSUInteger style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable;
-            ApexWindow2 *window = [[ApexWindow2 alloc] initWithContentRect:rect
+            native_data->data.window = [[ApexWindow2 alloc] initWithContentRect:frame
                                                       styleMask:style
                                                         backing:NSBackingStoreBuffered
                                                           defer:NO];
-            native_data->data.window = window;
+            NSView *content_view = [[NSView alloc] initWithFrame:frame];
+
+            ApexWindowDelegate2 *delegate = [[ApexWindowDelegate2 alloc] init];
+            delegate.data = native_data->data;
+            [native_data->data.window setDelegate:delegate];
 
             [native_data->data.window setTitle:@(options.title.data())];
+            [native_data->data.window setContentView:content_view];
+
             [native_data->data.window setAcceptsMouseMovedEvents:YES];
+
+            [native_data->data.window makeKeyAndOrderFront:nil];
+            [NSApp activateIgnoringOtherApps:YES];
+
+            native_data->data.display = std::weak_ptr(display);
 
             display->m_native_data = std::move(native_data);
         }

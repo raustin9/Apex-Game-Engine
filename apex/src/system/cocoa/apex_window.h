@@ -17,13 +17,14 @@
 
 @interface                                                       ApexWindowData : NSObject
 @property(nonatomic, assign) std::weak_ptr<apx::system::Display> display;
-@property(nonatomic, assign) ApexWindow2                        *window;
+@property(nonatomic, strong) NSWindow                           *window;
 @end
+// @property(nonatomic, strong) NSView                             *content_view;
 
-@interface                                 ApexWindowDelegate : NSResponder <NSWindowDelegate>
+@interface                                   ApexWindowDelegate2 : NSResponder <NSWindowDelegate>
 // Similar to SDL https://github.com/libsdl-org/SDL/blob/main/src/video/cocoa/SDL_cocoawindow.h
 // this is a weak
-@property(nonatomic, weak) ApexWindowData *data;
+@property(nonatomic, assign) ApexWindowData *data;
 
 @end
 

@@ -10,11 +10,12 @@
 @property(nonatomic, assign) std::weak_ptr<apx::system::DisplayServer> display_server;
 @end
 
-@interface                                        ApexApplication : NSApplication
+@interface                                        ApexApplication2 : NSApplication
 @property(nonatomic, assign) ApexApplicationData *data;
 
 - (instancetype)initWithData:(ApexApplicationData *)data;
 - (void)terminate:(id)sender;
+- (void)sendEvent:(NSEvent *)event;
 @end
 
 #endif // APEX_PLATFORM_APPLE

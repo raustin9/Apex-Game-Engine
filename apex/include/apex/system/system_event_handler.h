@@ -16,9 +16,18 @@ namespace apx::system
         /// @brief A unified version of all the events specified for this handler
         using UnifiedEvent = Event<EventList<Ts...>>;
 
+        /// @brief A listener callback for type T
+        template <typename T>
+        using Listener = typename EventBroker<T>::Listener;
+
+        /// @brief A handle to a listener of type T
+        template <typename T>
+        using Handle = typename EventBroker<T>::Handle;
+
       public:
         [[nodiscard]] explicit SystemEventHandler() noexcept
         {
+            // register a callback to insert each event type into the queue
             // NOTE: ignore the return type here since they get cleaned up anyway
             ((void)get_broker<Ts>().add_listener(
                  [this](Ts data) { m_event_queue.push(UnifiedEvent(data)); }),
@@ -60,12 +69,22 @@ namespace apx::system
         }
 
       private:
+        friend class Display;
+        friend class DisplayServer;
+
         /// @brief Get a broker for the corresponding data type
         template <typename T>
         [[nodiscard]] EventBroker<T> &
         get_broker() noexcept
         {
             return std::get<EventBroker<T>>(m_event_brokers);
+        }
+
+        /// @brief Close the handler from
+        void
+        end_polling() noexcept
+        {
+            m_event_queue.close();
         }
 
         std::tuple<EventBroker<Ts>...>  m_event_brokers{};

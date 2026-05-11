@@ -5,7 +5,7 @@ template <typename T>
 void
 test_event(T data)
 {
-    apx::Event event{ data };
+    apx::SystemEvent event{ data };
 
     REQUIRE(event.is<T>());
 }
@@ -18,7 +18,7 @@ TEST_CASE("basic event type", "[system_event]")
 
 template <typename Is, typename Isnt>
 void
-test_event_handler(Is is, Isnt isnt)
+test_event_handler(Is is, Isnt)
 {
     apx::system::SystemEventHandler<apx::system::SystemEventList> handler{};
     bool                                                          wrong_callback_called{ false };
@@ -41,6 +41,9 @@ test_event_handler(Is is, Isnt isnt)
 
     REQUIRE(handler.remove_listener<Is>(handle));
     REQUIRE(handler.remove_listener<Isnt>(handle2));
+
+    const std::optional<apx::system::SystemEvent> event2 = handler.next_event();
+    REQUIRE_FALSE(event2.has_value());
 }
 
 TEST_CASE("system event handler", "[system_event]")
