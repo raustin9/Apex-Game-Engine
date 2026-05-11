@@ -53,10 +53,10 @@ namespace apx::system
         }
 
         /// @brief Get and pop the next event from the queue
-        [[nodiscard]] UnifiedEvent
+        [[nodiscard]] std::optional<UnifiedEvent>
         next_event() noexcept
         {
-            return m_event_queue.pop();
+            return m_event_queue.try_pop();
         }
 
       private:

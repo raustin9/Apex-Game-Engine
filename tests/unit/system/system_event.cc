@@ -27,8 +27,9 @@ TEST_CASE("system event handler", "[system_event]")
     handler.dispatch(apx::system::WindowClose{});
 
     const auto event = handler.next_event();
-    REQUIRE(event.is<apx::system::WindowClose>());
-    REQUIRE_FALSE(event.is<apx::system::WindowOpen>());
+    REQUIRE(event.has_value());
+    REQUIRE(event->is<apx::system::WindowClose>());
+    REQUIRE_FALSE(event->is<apx::system::WindowOpen>());
     REQUIRE(lambda_called);
     REQUIRE(handler.remove_listener<apx::system::WindowClose>(handle));
 }
