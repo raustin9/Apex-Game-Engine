@@ -3,6 +3,8 @@
 
 #include "apex_window.h"
 
+#include <algorithm>
+
 namespace apx::system
 {
     struct Display::NativeData
@@ -70,8 +72,19 @@ namespace apx::system
         return display;
     }
 
+    bool Display::is_open() const noexcept
+    {
+        return [m_native_data->data.window isVisible];
+    }
+
     bool Display::request_close() noexcept
     {
+        if ( !is_open() )
+            return false;
+
+        [m_native_data->data.window performClose:nil];
+        [m_native_data->data.window close];
+
         return true;
     }
 
@@ -79,6 +92,54 @@ namespace apx::system
     {
         NSWindow *window = [m_native_data->data window];
         [window setTitle:@(title.data())];
+        return true;
+    }
+
+    bool Display::resize(const Extent2D_u32 extent) noexcept
+    {
+        NSWindow *window = m_native_data->data.window;
+        NSScreen *screen = [m_native_data->data.window screen] ?: [NSScreen mainScreen];
+        NSRect screen_frame = [screen frame];
+        NSRect visible_frame = [screen visibleFrame];
+
+        const CGFloat new_width = static_cast<CGFloat>(extent.width.get());
+        const CGFloat new_height = static_cast<CGFloat>(extent.height.get());
+        const CGFloat adjusted_width = std::min(visible_frame.size.width, new_width);
+        const CGFloat adjusted_height = std::min(visible_frame.size.height, new_height);
+
+
+        // Adjust the origin of the window to account
+        // for resizing dimensions too large for current position
+        {
+            NSRect window_frame = [window frame];
+            NSPoint window_origin = window_frame.origin;
+            NSPoint new_origin = window_origin;
+
+            new_origin.x = adjusted_width + window_origin.x > screen_frame.size.width
+                               ? screen_frame.size.width - adjusted_width
+                               : window_origin.x;
+
+            new_origin.y = adjusted_height + window_origin.y > screen_frame.size.height
+                               ? screen_frame.size.height - adjusted_height
+                               : window_origin.y;
+            [window setFrameOrigin:new_origin];
+        }
+
+        // Resize the window
+        {
+            NSSize size = NSMakeSize(
+                adjusted_width,
+                adjusted_height
+            );
+            [m_native_data->data.window setContentSize:size];
+        }
+
+        // Find the size after the resize
+        {
+            NSSize after_resize = [[m_native_data->data.window contentView] frame].size;
+            m_current_extent = Extent2D_u32{ Width_u32(after_resize.width), Height_u32(after_resize.height) };
+        }
+
         return true;
     }
 } // namespace apx::system

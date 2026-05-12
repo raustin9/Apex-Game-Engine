@@ -89,6 +89,9 @@ namespace apx::system
             return m_title;
         }
 
+        /// @brief Determine if this display is currently open
+        [[nodiscard]] bool is_open() const noexcept;
+
         /// @brief Get this display's input handler
         InputHandler &
         input() noexcept
@@ -110,6 +113,9 @@ namespace apx::system
 
         /// @brief Update the title of this display
         bool set_title(std::string_view title) noexcept;
+
+        /// @brief Resize the display to a desired size
+        bool resize(const Extent2D_u32 extent) noexcept;
 
         // Event handling
       public:

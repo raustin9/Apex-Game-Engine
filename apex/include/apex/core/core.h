@@ -1,4 +1,5 @@
 #pragma once
+#include "debug.h"
 #include "dimension.h"
 #include "error.h"
 #include "expected.h"
