@@ -3,7 +3,7 @@
 #include "apex/event/event.h"
 #include "system_input.h"
 
-namespace apx::system
+namespace apx::sys
 {
     /// @brief Triggers when a display is opened
     struct DisplayOpen
@@ -47,4 +47,4 @@ namespace apx::system
 
     using SystemEventList = EventList<DisplayOpen, DisplayClose, KeyDown, KeyUp, DisplayResized,
                                       MouseMoved, DisplayMoved>;
-} // namespace apx::system
+} // namespace apx::sys

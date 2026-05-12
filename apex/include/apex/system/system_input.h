@@ -6,7 +6,7 @@
 
 #include <array>
 
-namespace apx::system
+namespace apx::sys
 {
     /// @brief Possible states for a pressable key
     enum class KeyState : std::uint8_t
@@ -95,4 +95,4 @@ namespace apx::system
         KeyboardState m_key_state;
         MouseState    m_mouse_state;
     };
-} // namespace apx::system
+} // namespace apx::sys

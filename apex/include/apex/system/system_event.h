@@ -4,7 +4,7 @@
 #include "system_events.h"
 #include "system_key.h"
 
-namespace apx::system
+namespace apx::sys
 {
     template <typename EventKinds>
     class Event;
@@ -47,10 +47,10 @@ namespace apx::system
 
     /// @brief Event for system level events
     using SystemEvent = Event<SystemEventList>;
-} // namespace apx::system
+} // namespace apx::sys
 
 namespace apx
 {
-    /// @brief See `apx::system::SystemEvent`
-    using SystemEvent = system::SystemEvent;
+    /// @brief See `apx::sys::SystemEvent`
+    using SystemEvent = sys::SystemEvent;
 } // namespace apx

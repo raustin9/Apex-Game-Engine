@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace apx::system
+namespace apx::sys
 {
     struct DisplayServer::NativeData
     {
@@ -31,10 +31,7 @@ namespace apx::system
         native_data->data = [[ApexApplicationData alloc] init];
         native_data->data.display_server = server;
 
-//        ApexApplication2 *app = [ApexApplication2 sharedApplication];
-
-//        app.data = native_data->data;
-        [NSApplication sharedApplication];
+        [ApexApplication2 sharedApplication];
 
         server->m_native_data = std::move(native_data);
         server->m_is_running = true;
@@ -82,5 +79,5 @@ namespace apx::system
     void
     DisplayServer::native_shutdown() noexcept
     {}
-} // namespace apx::system
+} // namespace apx::sys
 #endif // APEX_PLATFORM_APPLE

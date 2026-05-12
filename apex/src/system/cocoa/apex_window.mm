@@ -29,7 +29,7 @@
 
 -(BOOL)windowShouldClose:(id)sender
 {
-    _data.display.lock()->__dispatch_event<apx::system::DisplayClose>({});
+    _data.display.lock()->__dispatch_event<apx::sys::DisplayClose>({});
     return NO;
 }
 
@@ -48,7 +48,7 @@
 -(void)windowDidMove:(NSNotification *)notification
 {
     NSPoint new_origin = [self.data.window frame].origin;
-    self.data.display.lock()->__dispatch_event(apx::system::DisplayMoved{ apx::Point2D_u32(new_origin.x, new_origin.y) });
+    self.data.display.lock()->__dispatch_event(apx::sys::DisplayMoved{ apx::Point2D_u32(new_origin.x, new_origin.y) });
 }
 
 -(void)windowDidResize:(NSNotification *)notification
@@ -103,8 +103,8 @@
         return;
 
     self.data.display.lock()->__handle_key(
-        apx::system::translate_key([event keyCode]),
-        apx::system::KeyState::DOWN
+        apx::sys::translate_key([event keyCode]),
+        apx::sys::KeyState::DOWN
     );
 }
 
@@ -112,8 +112,8 @@
 - (void)keyUp:(NSEvent *)event
 {
     self.data.display.lock()->__handle_key(
-        apx::system::translate_key([event keyCode]),
-        apx::system::KeyState::UP
+        apx::sys::translate_key([event keyCode]),
+        apx::sys::KeyState::UP
     );
 }
 

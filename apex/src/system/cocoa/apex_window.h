@@ -15,9 +15,9 @@
 - (void)sendEvent:(NSEvent *)event;
 @end
 
-@interface                                                       ApexWindowData : NSObject
-@property(nonatomic, assign) std::weak_ptr<apx::system::Display> display;
-@property(nonatomic, strong) NSWindow                           *window;
+@interface                                                    ApexWindowData : NSObject
+@property(nonatomic, assign) std::weak_ptr<apx::sys::Display> display;
+@property(nonatomic, strong) NSWindow                        *window;
 @end
 // @property(nonatomic, strong) NSView                             *content_view;
 

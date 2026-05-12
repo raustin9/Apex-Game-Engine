@@ -4,7 +4,7 @@
 #include <string_view>
 
 #ifdef APEX_PLATFORM_APPLE
-namespace apx::system
+namespace apx::sys
 {
     struct SystemTraits
     {
@@ -13,5 +13,5 @@ namespace apx::system
         constexpr static bool             mouse_available    = true;
         constexpr static bool             keyboard_available = true;
     };
-} // namespace apx
+} // namespace apx::sys
 #endif // APEX_PLATFORM_APPLE

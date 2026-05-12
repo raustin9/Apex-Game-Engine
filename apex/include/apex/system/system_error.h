@@ -1,7 +1,8 @@
 #pragma once
-#include "apex/core/error.h"
+#include "apex/core/core.h"
+#include <string_view>
 
-namespace apx::system
+namespace apx::sys
 {
     enum class ErrorCode
     {

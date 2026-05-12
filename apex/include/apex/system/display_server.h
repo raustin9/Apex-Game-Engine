@@ -9,7 +9,7 @@
 #include <ranges>
 #include <string>
 
-namespace apx::system
+namespace apx::sys
 {
     /// @brief An interactive display
     class Display
@@ -73,6 +73,13 @@ namespace apx::system
 
         /// @brief Get the current width of the display
         [[nodiscard]] Height_u32 inner_height() const noexcept;
+
+        /// @brief Get the extent of the drawable of the display
+        [[nodiscard]] Extent2D_u32
+        inner_extent() const noexcept
+        {
+            return Extent2D_u32{ inner_width(), inner_height() };
+        }
 
         /// @brief Get the title of the display
         [[nodiscard]] std::string_view
@@ -307,4 +314,4 @@ namespace apx::system
         bool                                                        m_is_running{ false };
         SystemEventHandler<SystemEventList>                         m_event_handler;
     };
-} // namespace apx::system
+} // namespace apx::sys

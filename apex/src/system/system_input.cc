@@ -1,6 +1,6 @@
 #include "apex/system/system.h"
 
-namespace apx::system
+namespace apx::sys
 {
     KeyState
     InputHandler::current_key_state(const Key::Code key_code) const noexcept

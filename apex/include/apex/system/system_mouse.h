@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-namespace apx::system
+namespace apx::sys
 {
     /// @brief Enumeration of mouse buttons
     enum class MouseButton : std::uint32_t

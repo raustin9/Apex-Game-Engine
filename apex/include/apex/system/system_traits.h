@@ -7,7 +7,7 @@
 
 namespace apx
 {
-    namespace system
+    namespace sys
     {
         template <typename Traits>
         concept ValidSystemTraits = requires {
@@ -21,5 +21,5 @@ namespace apx
     } // namespace system
 
     /// Convenience alias for system::SystemTraits
-    using system_traits = system::SystemTraits;
-} // namespace apx
+    using system_traits = sys::SystemTraits;
+} // namespace apx::sys

@@ -4,7 +4,7 @@
 #include "apex/sync/sync.h"
 #include "system_event.h"
 
-namespace apx::system
+namespace apx::sys
 {
     template <typename EventKinds>
     class SystemEventHandler;
@@ -90,4 +90,4 @@ namespace apx::system
         std::tuple<EventBroker<Ts>...>  m_event_brokers{};
         sync::AtomicQueue<UnifiedEvent> m_event_queue{};
     };
-} // namespace apx::system
+} // namespace apx::sys

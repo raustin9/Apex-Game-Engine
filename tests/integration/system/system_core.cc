@@ -8,11 +8,11 @@ TEST_CASE("startup and close immediately", "[system]")
 {
     const std::string_view title          = "TEST_TITLE";
     bool                   running        = true;
-    auto                   display_server = apx::system::DisplayServer::create().value();
+    auto                   display_server = apx::sys::DisplayServer::create().value();
     auto                   display = display_server->spawn_display({ .title = title }).value();
 
     const auto             handle
-        = display->on<apx::system::DisplayClose>([&running](const apx::system::DisplayClose ev) {
+        = display->on<apx::sys::DisplayClose>([&running](const apx::sys::DisplayClose ev) {
               (void)ev;
               running = false;
           });
@@ -25,7 +25,7 @@ TEST_CASE("startup and close immediately", "[system]")
         }
     while ( running );
 
-    REQUIRE(display->remove_listener<apx::system::DisplayClose>(handle));
+    REQUIRE(display->remove_listener<apx::sys::DisplayClose>(handle));
 }
 
 void

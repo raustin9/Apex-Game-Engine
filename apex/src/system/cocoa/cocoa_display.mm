@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-namespace apx::system
+namespace apx::sys
 {
     struct Display::NativeData
     {
@@ -173,6 +173,6 @@ namespace apx::system
         [window setFrameOrigin:new_origin];
         return true;
     }
-} // namespace apx::system
+} // namespace apx::sys
 
 #endif // APEX_PLATFORM_APPLE

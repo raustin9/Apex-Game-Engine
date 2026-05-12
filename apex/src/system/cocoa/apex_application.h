@@ -6,8 +6,8 @@
 #import <AppKit/AppKit.h>
 #import <Cocoa/Cocoa.h>
 
-@interface ApexApplicationData : NSObject
-@property(nonatomic, assign) std::weak_ptr<apx::system::DisplayServer> display_server;
+@interface                                                          ApexApplicationData : NSObject
+@property(nonatomic, assign) std::weak_ptr<apx::sys::DisplayServer> display_server;
 @end
 
 @interface                                        ApexApplication2 : NSApplication

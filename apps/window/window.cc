@@ -12,16 +12,15 @@
 int
 main(void)
 {
-    bool                    running  = true;
-    bool                    is_large = false;
+    bool                        running  = true;
+    bool                        is_large = false;
 
-    const apx::Extent2D_u32 original_extent
+    constexpr apx::Extent2D_u32 original_extent
         = apx::Extent2D_u32{ apx::Width_u32(640), apx::Height_u32(480) };
-    const apx::Extent2D_u32 large_extent
+    constexpr apx::Extent2D_u32 large_extent
         = apx::Extent2D_u32{ apx::Width_u32(1920), apx::Height_u32(1080) };
 
-    apx::expected<std::shared_ptr<apx::system::DisplayServer>, apx::system::SystemError>
-        exp_display_server = apx::system::DisplayServer::create();
+    apx::expected exp_display_server = apx::sys::DisplayServer::create();
 
     if ( !exp_display_server )
         {
@@ -29,10 +28,10 @@ main(void)
             std::exit(EXIT_FAILURE);
         }
 
-    std::shared_ptr<apx::system::DisplayServer> display_server = exp_display_server.value();
-    std::shared_ptr<apx::system::Display>       display
+    std::shared_ptr<apx::sys::DisplayServer> display_server = exp_display_server.value();
+    std::shared_ptr<apx::sys::Display>       display
         = display_server
-              ->spawn_display(apx::system::Display::CreateOptions{
+              ->spawn_display(apx::sys::Display::CreateOptions{
                   .title  = "Apex Test Window",
                   .extent = original_extent,
               })
@@ -43,14 +42,14 @@ main(void)
 
     // Callback for DisplayClose
     const auto handle
-        = display->on<apx::system::DisplayClose>([&running](const apx::system::DisplayClose ev) {
+        = display->on<apx::sys::DisplayClose>([&running](const apx::sys::DisplayClose ev) {
               (void)ev;
               running = false;
           });
 
     // Callback for KeyDown events (kill application on Esc)
     const auto escape_handle
-        = display->on<apx::system::KeyDown>([&running](const apx::system::KeyDown ev) {
+        = display->on<apx::sys::KeyDown>([&running](const apx::sys::KeyDown ev) {
               if ( ev.key != apx::Key::Code::Esc ) [[likely]]
                   return;
 
@@ -59,8 +58,8 @@ main(void)
           });
 
     // Callback for KeyUp events
-    const auto key_handle = display->on<apx::system::KeyUp>(
-        [&display, &is_large, large_extent, original_extent](const apx::system::KeyUp ev) {
+    const auto key_handle = display->on<apx::sys::KeyUp>(
+        [&display, &is_large, large_extent, original_extent](const apx::sys::KeyUp ev) {
             std::cout << "Key pressed: " << ev.key << std::endl;
 
             switch ( ev.key.code() )
@@ -86,7 +85,7 @@ main(void)
 
     // Callback for DisplayResized events
     const auto resize_handle
-        = display->on<apx::system::DisplayResized>([](const apx::system::DisplayResized ev) {
+        = display->on<apx::sys::DisplayResized>([](const apx::sys::DisplayResized ev) {
               std::cout << "Display resized: (" << ev.extent.width << ", " << ev.extent.height
                         << ")" << std::endl;
           });
@@ -98,28 +97,27 @@ main(void)
             // Poll events
             while ( const std::optional event = display->next_event() )
                 {
-                    if ( event->is<apx::system::MouseMoved>() )
+                    if ( event->is<apx::sys::MouseMoved>() )
                         {
                             std::cout << "Mouse moved: ("
-                                      << event->get<apx::system::MouseMoved>().position.x << ", "
-                                      << event->get<apx::system::MouseMoved>().position.y << ")"
+                                      << event->get<apx::sys::MouseMoved>().position.x << ", "
+                                      << event->get<apx::sys::MouseMoved>().position.y << ")"
                                       << std::endl;
                         }
-                    else if ( event->is<apx::system::DisplayMoved>() )
+                    else if ( event->is<apx::sys::DisplayMoved>() )
                         {
                             std::cout << "Display moved: ("
-                                      << event->get<apx::system::DisplayMoved>().new_origin.x
-                                      << ", "
-                                      << event->get<apx::system::DisplayMoved>().new_origin.y << ")"
+                                      << event->get<apx::sys::DisplayMoved>().new_origin.x << ", "
+                                      << event->get<apx::sys::DisplayMoved>().new_origin.y << ")"
                                       << std::endl;
                         }
                 }
         }
 
-    (void)display->remove_listener<apx::system::DisplayClose>(handle);
-    (void)display->remove_listener<apx::system::KeyDown>(escape_handle);
-    (void)display->remove_listener<apx::system::KeyUp>(key_handle);
-    (void)display->remove_listener<apx::system::DisplayResized>(resize_handle);
+    (void)display->remove_listener<apx::sys::DisplayClose>(handle);
+    (void)display->remove_listener<apx::sys::KeyDown>(escape_handle);
+    (void)display->remove_listener<apx::sys::KeyUp>(key_handle);
+    (void)display->remove_listener<apx::sys::DisplayResized>(resize_handle);
 
     return EXIT_SUCCESS;
 }

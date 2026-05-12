@@ -12,17 +12,17 @@ test_event(T data)
 
 TEST_CASE("basic event type", "[system_event]")
 {
-    test_event(apx::system::KeyUp{ .key = apx::Key::Code::A });
-    test_event(apx::system::DisplayOpen{});
+    test_event(apx::sys::KeyUp{ .key = apx::Key::Code::A });
+    test_event(apx::sys::DisplayOpen{});
 }
 
 template <typename Is, typename Isnt>
 void
 test_event_handler(Is is, Isnt)
 {
-    apx::system::SystemEventHandler<apx::system::SystemEventList> handler{};
-    bool                                                          wrong_callback_called{ false };
-    bool                                                          callback_was_called{ false };
+    apx::sys::SystemEventHandler<apx::sys::SystemEventList> handler{};
+    bool                                                    wrong_callback_called{ false };
+    bool                                                    callback_was_called{ false };
 
     auto handle = handler.on<Is>([&callback_was_called](Is ev) { callback_was_called = true; });
     auto handle2
@@ -30,7 +30,7 @@ test_event_handler(Is is, Isnt)
 
     handler.dispatch(is);
 
-    const std::optional<apx::system::SystemEvent> event = handler.next_event();
+    const std::optional<apx::sys::SystemEvent> event = handler.next_event();
 
     REQUIRE(event.has_value());
     REQUIRE(event->is<Is>());
@@ -42,14 +42,14 @@ test_event_handler(Is is, Isnt)
     REQUIRE(handler.remove_listener<Is>(handle));
     REQUIRE(handler.remove_listener<Isnt>(handle2));
 
-    const std::optional<apx::system::SystemEvent> event2 = handler.next_event();
+    const std::optional<apx::sys::SystemEvent> event2 = handler.next_event();
     REQUIRE_FALSE(event2.has_value());
 }
 
 TEST_CASE("system event handler", "[system_event]")
 {
-    test_event_handler(apx::system::DisplayOpen{}, apx::system::DisplayClose{});
-    test_event_handler(apx::system::DisplayClose{}, apx::system::DisplayOpen{});
-    test_event_handler(apx::system::KeyUp{ .key = apx::Key{ apx::Key::Code::A } },
-                       apx::system::DisplayOpen{});
+    test_event_handler(apx::sys::DisplayOpen{}, apx::sys::DisplayClose{});
+    test_event_handler(apx::sys::DisplayClose{}, apx::sys::DisplayOpen{});
+    test_event_handler(apx::sys::KeyUp{ .key = apx::Key{ apx::Key::Code::A } },
+                       apx::sys::DisplayOpen{});
 }

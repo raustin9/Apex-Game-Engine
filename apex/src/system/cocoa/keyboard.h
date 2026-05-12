@@ -8,7 +8,7 @@
 
 using CocoaScanCode = unsigned short;
 
-namespace apx::system
+namespace apx::sys
 {
     /// @brief Translate a cocoa keyboard scancode into an apx::Key
     inline Key::Code
