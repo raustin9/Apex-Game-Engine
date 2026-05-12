@@ -109,7 +109,7 @@ namespace apx
             Fn15,
             Pause,
 
-            NUM_KEYS
+            COUNT
         };
 
         /// @brrief Initialize a Key from a Key::Code

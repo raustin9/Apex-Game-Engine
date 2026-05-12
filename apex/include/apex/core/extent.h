@@ -70,6 +70,13 @@ namespace apx
         explicit constexpr Point2D(N x, N y) noexcept : x(x), y(y) {}
 
         // TODO: math?
+
+        /// @brief Comparison with another Point2D of same numeric type
+        [[nodiscard]] bool
+        operator==(const Point2D<N> &other) const noexcept
+        {
+            return x == other.x && y == other.y;
+        }
     };
 
     template <traits::Numeric N>

@@ -44,6 +44,12 @@ main(void)
     const auto key_handle = display->on<apx::system::KeyUp>(
         [](apx::system::KeyUp ev) { std::cout << "Key pressed: " << ev.key << std::endl; });
 
+    const auto resize_handle
+        = display->on<apx::system::DisplayResized>([](apx::system::DisplayResized ev) {
+              std::cout << "Display resized: (" << ev.extent.width << ", " << ev.extent.height
+                        << ")" << std::endl;
+          });
+
     while ( running )
         {
             display_server->pump_events();
@@ -61,6 +67,7 @@ main(void)
 
     (void)display->remove_listener<apx::system::DisplayClose>(handle);
     (void)display->remove_listener<apx::system::KeyDown>(escape_handle);
+    (void)display->remove_listener<apx::system::DisplayResized>(resize_handle);
 
     return 0;
 }

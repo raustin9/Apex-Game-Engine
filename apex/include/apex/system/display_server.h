@@ -89,6 +89,20 @@ namespace apx::system
             return m_title;
         }
 
+        /// @brief Get this display's input handler
+        InputHandler &
+        input() noexcept
+        {
+            return m_input_handler;
+        }
+
+        /// @brief Get this display's input handler
+        const InputHandler &
+        input() const noexcept
+        {
+            return m_input_handler;
+        }
+
         // Mutators
       public:
         /// @brief Request to close this display
@@ -135,11 +149,51 @@ namespace apx::system
 
         /// @brief Handle a key down event
         /// @note This should only be called internally
-        void __handle_key_down(const Key::Code code);
+        void
+        __handle_key(const Key::Code key_code, const KeyState state) noexcept
+        {
+            if ( input().current_key_state(key_code) == state )
+                return;
+
+            input().update_key(key_code, state);
+            switch ( state )
+                {
+                case KeyState::DOWN:
+                    __dispatch_event(KeyDown{ .key = key_code });
+                    break;
+                case KeyState::UP:
+                    __dispatch_event(KeyUp{ .key = key_code });
+                    break;
+                }
+        }
+
+        /// @brief Handle a potential resize of the display
+        /// @note This should only be called internally
+        void
+        __handle_resize(Width_u32 width, Height_u32 height) noexcept
+        {
+            if ( current_width() == width && current_height() == height ) [[unlikely]]
+                return;
+
+            m_current_extent.width  = width;
+            m_current_extent.height = height;
+
+            __dispatch_event(DisplayResized{ width, height });
+        }
 
         /// @brief Handle a key down event
         /// @note This should only be called internally
-        void __handle_mouse_move(std::uint32_t x, std::uint32_t y) noexcept;
+        void
+        __handle_mouse_move(std::uint32_t x, std::uint32_t y) noexcept
+        {
+            const Vec2u position{ x, y };
+            if ( input().mouse_position() == position || position.x >= current_width()
+                 || position.y >= current_height() )
+                return;
+
+            input().update_mouse_position(position);
+            __dispatch_event(MouseMoved{ position });
+        }
 
       private:
         friend class DisplayServer;
@@ -170,6 +224,7 @@ namespace apx::system
         Handle                      m_handle;
         DisplayServer              *m_server;
         EventHandler                m_event_handler;
+        InputHandler                m_input_handler;
 
         std::unique_ptr<NativeData> m_native_data{ nullptr };
     };

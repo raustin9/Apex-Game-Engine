@@ -44,8 +44,24 @@
 
     if ([window delegate] != nil)
     {
-//        [notification_center addObserver:self selector:@selector()];
     }
+}
+
+-(void)windowDidResize:(NSNotification *)notification
+{
+    NSWindow *ns_window = self.data.window;
+    NSRect rect = [ns_window frame];
+    NSRect converted_rect = [self convertRect:rect];
+
+    self.data.display.lock()->__handle_resize(apx::Width_u32(converted_rect.size.width), apx::Height_u32(converted_rect.size.height));
+}
+
+-(NSRect)convertRect:(NSRect)rect
+{
+    NSRect converted_rect = rect;
+
+    converted_rect.origin.y = self.data.display.lock()->current_height() - rect.origin.y - rect.size.height;
+    return converted_rect;
 }
 
 @end
@@ -72,9 +88,7 @@
 {
     NSPoint position = event.locationInWindow;
 
-    self.data.display.lock()->__dispatch_event(apx::system::MouseMoved{
-        .position = apx::Vec2u(position.x, position.y)
-    });
+    self.data.display.lock()->__handle_mouse_move(position.x, position.y);
 }
 
 - (void)keyDown:(NSEvent *)event
@@ -83,7 +97,7 @@
         return;
 
     apx::Key key = apx::system::translate_key([event keyCode]);
-    self.data.display.lock()->__dispatch_event(apx::system::KeyDown{ .key = key });
+    self.data.display.lock()->__handle_key(key.code(), apx::system::KeyState::DOWN);
 }
 
 - (void)keyUp:(NSEvent *)event
@@ -92,7 +106,7 @@
         return;
 
     apx::Key key = apx::system::translate_key([event keyCode]);
-    self.data.display.lock()->__dispatch_event(apx::system::KeyUp{ .key = key });
+    self.data.display.lock()->__handle_key(key.code(), apx::system::KeyState::UP);
 }
 
 @end
