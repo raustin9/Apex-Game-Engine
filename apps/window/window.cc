@@ -41,8 +41,14 @@ main(void)
               running = false;
           });
 
-    const auto key_handle = display->on<apx::system::KeyUp>(
-        [](apx::system::KeyUp ev) { std::cout << "Key pressed: " << ev.key << std::endl; });
+    const auto key_handle = display->on<apx::system::KeyUp>([&display](apx::system::KeyUp ev) {
+        std::cout << "Key pressed: " << ev.key << std::endl;
+
+        if ( ev.key == apx::Key::Code::T )
+            {
+                display->set_title("New Title");
+            }
+    });
 
     const auto resize_handle
         = display->on<apx::system::DisplayResized>([](apx::system::DisplayResized ev) {
@@ -67,6 +73,7 @@ main(void)
 
     (void)display->remove_listener<apx::system::DisplayClose>(handle);
     (void)display->remove_listener<apx::system::KeyDown>(escape_handle);
+    (void)display->remove_listener<apx::system::KeyUp>(key_handle);
     (void)display->remove_listener<apx::system::DisplayResized>(resize_handle);
 
     return 0;

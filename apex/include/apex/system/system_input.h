@@ -41,11 +41,6 @@ namespace apx::system
         /// @brief Determine if a key was previously up
         [[nodiscard]] bool     was_key_up(const Key::Code key_code) const noexcept;
 
-        /// @brief Update a key with a new state
-        /// @note If the provided `state` is the same as `current_key_state()` then this will do
-        /// nothing
-        void                   update_key(const Key::Code key_code, const KeyState state) noexcept;
-
         /// @brief Get the current mouse button's pressed state
         [[nodiscard]] MousePressState
         current_mouse_button_pressed_state(const MouseButton button) const noexcept;
@@ -71,6 +66,11 @@ namespace apx::system
 
         /// @brief Set the previous key state
         void set_previous_key_state(const Key::Code key_code, const KeyState state) noexcept;
+
+        /// @brief Update a key with a new state
+        /// @note If the provided `state` is the same as `current_key_state()` then this will do
+        /// nothing
+        void update_key(const Key::Code key_code, const KeyState state) noexcept;
 
         void update_mouse_position(const Vec2u mouse_position) noexcept;
 

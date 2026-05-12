@@ -74,6 +74,13 @@ namespace apx::system
     {
         return true;
     }
+
+    bool Display::set_title(std::string_view title) noexcept
+    {
+        NSWindow *window = [m_native_data->data window];
+        [window setTitle:@(title.data())];
+        return true;
+    }
 } // namespace apx::system
 
 #endif // APEX_PLATFORM_APPLE
