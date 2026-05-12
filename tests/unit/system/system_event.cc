@@ -13,7 +13,7 @@ test_event(T data)
 TEST_CASE("basic event type", "[system_event]")
 {
     test_event(apx::system::KeyUp{ .key = apx::Key::Code::A });
-    test_event(apx::system::WindowOpen{});
+    test_event(apx::system::DisplayOpen{});
 }
 
 template <typename Is, typename Isnt>
@@ -48,8 +48,8 @@ test_event_handler(Is is, Isnt)
 
 TEST_CASE("system event handler", "[system_event]")
 {
-    test_event_handler(apx::system::WindowOpen{}, apx::system::WindowClose{});
-    test_event_handler(apx::system::WindowClose{}, apx::system::WindowOpen{});
+    test_event_handler(apx::system::DisplayOpen{}, apx::system::DisplayClose{});
+    test_event_handler(apx::system::DisplayClose{}, apx::system::DisplayOpen{});
     test_event_handler(apx::system::KeyUp{ .key = apx::Key{ apx::Key::Code::A } },
-                       apx::system::WindowOpen{});
+                       apx::system::DisplayOpen{});
 }

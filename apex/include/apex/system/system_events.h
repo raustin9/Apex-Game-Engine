@@ -27,10 +27,16 @@ namespace apx::system
         Key key;
     };
 
-    /// @brief Triggers when
+    /// @brief Triggers when a display finished resizing
     struct DisplayResized
     {
         Extent2D_u32 extent;
+    };
+
+    /// @brief Triggers when a display is repositioned
+    struct DisplayMoved
+    {
+        Point2D_u32 new_origin;
     };
 
     /// @brief Triggers when the mouse is moved
@@ -39,6 +45,6 @@ namespace apx::system
         Vec2u position;
     };
 
-    using SystemEventList
-        = EventList<DisplayOpen, DisplayClose, KeyDown, KeyUp, DisplayResized, MouseMoved>;
+    using SystemEventList = EventList<DisplayOpen, DisplayClose, KeyDown, KeyUp, DisplayResized,
+                                      MouseMoved, DisplayMoved>;
 } // namespace apx::system

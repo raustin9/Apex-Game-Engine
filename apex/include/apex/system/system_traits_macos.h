@@ -9,7 +9,7 @@ namespace apx::system
     struct SystemTraits
     {
         constexpr static std::string_view system_name        = "MacOS";
-        constexpr static SystemType       system_type        = SystemType::MacOS;
+        constexpr static SystemType       system_type        = SystemType::MAC_OS;
         constexpr static bool             mouse_available    = true;
         constexpr static bool             keyboard_available = true;
     };

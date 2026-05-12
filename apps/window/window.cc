@@ -38,7 +38,7 @@ main(void)
               })
               .value();
 
-    std::cout << "(" << display->current_width() << ", " << display->current_height() << ")"
+    std::cout << "(" << display->inner_width() << ", " << display->inner_height() << ")"
               << std::endl;
 
     // Callback for DisplayClose
@@ -76,6 +76,9 @@ main(void)
 
                     is_large = !is_large;
                     break;
+                case apx::Key::Code::P:
+                    display->reposition(apx::Point2D_u32(50, 50));
+                    break;
                 default:
                     break;
                 }
@@ -100,6 +103,14 @@ main(void)
                             std::cout << "Mouse moved: ("
                                       << event->get<apx::system::MouseMoved>().position.x << ", "
                                       << event->get<apx::system::MouseMoved>().position.y << ")"
+                                      << std::endl;
+                        }
+                    else if ( event->is<apx::system::DisplayMoved>() )
+                        {
+                            std::cout << "Display moved: ("
+                                      << event->get<apx::system::DisplayMoved>().new_origin.x
+                                      << ", "
+                                      << event->get<apx::system::DisplayMoved>().new_origin.y << ")"
                                       << std::endl;
                         }
                 }

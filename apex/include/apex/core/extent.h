@@ -89,6 +89,21 @@ namespace apx
         // TODO: math?
     };
 
+    using Point2D_f32 = Point2D<float>;
+    using Point2D_f64 = Point2D<double>;
+    using Point2D_i8  = Point2D<std::int8_t>;
+    using Point2D_i16 = Point2D<std::int16_t>;
+    using Point2D_i32 = Point2D<std::int32_t>;
+    using Point2D_i64 = Point2D<std::int64_t>;
+    using Point2D_u8  = Point2D<std::uint8_t>;
+    using Point2D_u16 = Point2D<std::uint16_t>;
+    using Point2D_u32 = Point2D<std::uint32_t>;
+    using Point2D_u64 = Point2D<std::uint64_t>;
+
+    using Point2Df = Point2D_f32;
+    using Point2Du = Point2D_u32;
+    using Point2Di = Point2D_i32;
+
     template <traits::Numeric N>
     struct Vec2 : Point2D<N>
     {

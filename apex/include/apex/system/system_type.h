@@ -2,9 +2,9 @@
 
 namespace apx::system
 {
-    /// Types of available systems
+    /// @brief Types of available systems
     enum class SystemType
     {
-        MacOS,
+        MAC_OS,
     };
 }

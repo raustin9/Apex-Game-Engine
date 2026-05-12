@@ -69,18 +69,10 @@ namespace apx::system
         }
 
         /// @brief Get the current width of the display
-        [[nodiscard]] Width_u32
-        current_width() const noexcept
-        {
-            return current_extent().width;
-        }
+        [[nodiscard]] Width_u32  inner_width() const noexcept;
 
-        /// @brief Get the current height of the display
-        [[nodiscard]] Height_u32
-        current_height() const noexcept
-        {
-            return current_extent().height;
-        }
+        /// @brief Get the current width of the display
+        [[nodiscard]] Height_u32 inner_height() const noexcept;
 
         /// @brief Get the title of the display
         [[nodiscard]] std::string_view
@@ -90,7 +82,10 @@ namespace apx::system
         }
 
         /// @brief Determine if this display is currently open
-        [[nodiscard]] bool is_open() const noexcept;
+        [[nodiscard]] bool        is_open() const noexcept;
+
+        /// @brief Get the origin of the window
+        [[nodiscard]] Point2D_u32 origin() const noexcept;
 
         /// @brief Get this display's input handler
         InputHandler &
@@ -116,6 +111,9 @@ namespace apx::system
 
         /// @brief Resize the display to a desired size
         bool resize(const Extent2D_u32 extent) noexcept;
+
+        /// @brief Reposition the window
+        bool reposition(const Point2D_u32 origin) noexcept;
 
         // Event handling
       public:
@@ -178,7 +176,7 @@ namespace apx::system
         void
         __handle_resize(Width_u32 width, Height_u32 height) noexcept
         {
-            if ( current_width() == width && current_height() == height ) [[unlikely]]
+            if ( m_current_extent.width == width && m_current_extent.height == height ) [[unlikely]]
                 return;
 
             m_current_extent.width  = width;
@@ -193,8 +191,8 @@ namespace apx::system
         __handle_mouse_move(std::uint32_t x, std::uint32_t y) noexcept
         {
             const Vec2u position{ x, y };
-            if ( input().mouse_position() == position || position.x >= current_width()
-                 || position.y >= current_height() )
+            if ( input().mouse_position() == position || position.x >= inner_width()
+                 || position.y >= inner_height() )
                 return;
 
             input().update_mouse_position(position);

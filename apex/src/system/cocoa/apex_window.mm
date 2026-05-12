@@ -29,9 +29,7 @@
 
 -(BOOL)windowShouldClose:(id)sender
 {
-    NSLog(@"windowShouldClose");
     _data.display.lock()->__dispatch_event<apx::system::DisplayClose>({});
-    NSLog(@"post dispatch");
     return NO;
 }
 
@@ -47,10 +45,16 @@
     }
 }
 
+-(void)windowDidMove:(NSNotification *)notification
+{
+    NSPoint new_origin = [self.data.window frame].origin;
+    self.data.display.lock()->__dispatch_event(apx::system::DisplayMoved{ apx::Point2D_u32(new_origin.x, new_origin.y) });
+}
+
 -(void)windowDidResize:(NSNotification *)notification
 {
     NSWindow *ns_window = self.data.window;
-    NSRect rect = [ns_window frame];
+    NSRect rect = [[ns_window contentView] frame];
     NSRect converted_rect = [self convertRect:rect];
 
     self.data.display.lock()->__handle_resize(apx::Width_u32(converted_rect.size.width), apx::Height_u32(converted_rect.size.height));
@@ -60,7 +64,7 @@
 {
     NSRect converted_rect = rect;
 
-    converted_rect.origin.y = self.data.display.lock()->current_height() - rect.origin.y - rect.size.height;
+    converted_rect.origin.y = self.data.display.lock()->inner_height() - rect.origin.y - rect.size.height;
     return converted_rect;
 }
 
@@ -84,6 +88,7 @@
     return YES;
 }
 
+// Handles the mouse move for a content view for a window
 - (void)mouseMoved:(NSEvent *)event
 {
     NSPoint position = event.locationInWindow;
@@ -91,22 +96,25 @@
     self.data.display.lock()->__handle_mouse_move(position.x, position.y);
 }
 
+// Handles the key down for a content view for a window
 - (void)keyDown:(NSEvent *)event
 {
     if ([event isARepeat])
         return;
 
-    apx::Key key = apx::system::translate_key([event keyCode]);
-    self.data.display.lock()->__handle_key(key.code(), apx::system::KeyState::DOWN);
+    self.data.display.lock()->__handle_key(
+        apx::system::translate_key([event keyCode]),
+        apx::system::KeyState::DOWN
+    );
 }
 
+// Handles the key up for a content view for a window
 - (void)keyUp:(NSEvent *)event
 {
-    if ([event isARepeat])
-        return;
-
-    apx::Key key = apx::system::translate_key([event keyCode]);
-    self.data.display.lock()->__handle_key(key.code(), apx::system::KeyState::UP);
+    self.data.display.lock()->__handle_key(
+        apx::system::translate_key([event keyCode]),
+        apx::system::KeyState::UP
+    );
 }
 
 @end
