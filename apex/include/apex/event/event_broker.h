@@ -20,6 +20,7 @@ namespace apx
 
         [[nodiscard]] Handle
         add_listener(Listener listener) noexcept
+        // add_listener(Listener &&listener) noexcept
         {
             return m_broker.subscribe(listener);
         }
@@ -33,8 +34,6 @@ namespace apx
         void
         fire(T event) noexcept
         {
-            std::cout << "EventBroker::fire" << std::endl;
-            // (void)m_broker.get_publisher();
             m_broker.get_publisher().notify(event);
         }
 

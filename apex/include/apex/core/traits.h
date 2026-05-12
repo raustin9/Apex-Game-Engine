@@ -14,4 +14,5 @@ namespace apx::traits
 
     template <typename T>
     concept POD = std::is_pod_v<T>;
+
 } // namespace apx::traits

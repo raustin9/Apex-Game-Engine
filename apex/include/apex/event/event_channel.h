@@ -5,7 +5,7 @@
 
 namespace apx
 {
-    template <ValidEvent E, typename S>
+    template <typename E, typename S>
     class EventChannel
     {
       public:
@@ -63,7 +63,7 @@ namespace apx
         std::shared_ptr<State> m_state;
     };
 
-    template <ValidEvent E, typename S>
+    template <typename E, typename S>
     class EventChannel<E, S>::Reader
     {
       public:
@@ -76,7 +76,7 @@ namespace apx
         std::shared_ptr<State> m_state;
     };
 
-    template <ValidEvent E, typename S>
+    template <typename E, typename S>
     class EventChannel<E, S>::Writer
     {
       public:
