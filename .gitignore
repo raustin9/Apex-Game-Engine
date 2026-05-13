@@ -3,5 +3,6 @@ out*
 
 .cache
 cmake*
+!CMakeLists.txt
 .idea*
 .idea/*
